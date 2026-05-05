@@ -8,7 +8,6 @@
 
 /* =============================================
    ПЕРЕМЕННЫЕ — все цвета и размеры в одном месте.
-   Менять только здесь, не искать по всему файлу.
    ============================================= */
 :root {
   --c-dark:       #2C1A0E; /* шапка, кнопка */
@@ -24,11 +23,11 @@
   --c-bg-footer:  #EDE5D0; /* фон подвала */
   --c-text-light: #F5F0E4; /* светлый текст на тёмном */
 
-  --card-w: 1100px; /* базовая ширина карточки — якорь для JS scale */
-  --card-h: 778px;  /* = card-w / (297/210) — точные пропорции А4 альбомный */
-  --border-main: 1.5px solid var(--c-gold);   /* внешние разделители рядов */
-  --border-cell: 0.5px solid var(--c-gold-mid); /* границы ячеек */
-  --border-line: 0.5px solid var(--c-gold-light); /* линии внутри полей */
+  --card-w: 1100px; /* базовая ширина карточки */
+  --card-h: 778px;  /* базовая высота карточки */
+  --border-main: 1.5px solid var(--c-gold);   
+  --border-cell: 0.5px solid var(--c-gold-mid); 
+  --border-line: 0.5px solid var(--c-gold-light); 
 }
 
 /* =============================================
@@ -42,17 +41,14 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Канвас слева */
   height: 100vh;
   margin: 0;
-  padding: 0;
+  padding-left: 20px; /* Отступ слева */
 }
 
 /* =============================================
-   КАРТОЧКА — фиксированный размер А4 альбомный.
-   JS масштабирует через transform: scale().
-   visibility: hidden до завершения JS — убирает мигание при загрузке.
-   transform-origin: top left — scale идёт от верхнего угла, не от центра.
+   КАРТОЧКА
    ============================================= */
 .card {
   width: var(--card-w);
@@ -69,8 +65,7 @@ body {
 }
 
 /* =============================================
-   ШАПКА — фиксированная высота, не тянется.
-   flex-shrink: 0 — не сжимается когда ряды делят оставшееся место.
+   ШАПКА (Карточка № удалена)
    ============================================= */
 .header {
   background: var(--c-dark);
@@ -86,9 +81,7 @@ body {
 }
 
 /* =============================================
-   РЯДЫ КОНТЕНТА — три ряда делят оставшуюся высоту поровну.
-   flex: 1 на каждом — браузер делит пространство равномерно.
-   НЕ менять на фиксированную высоту — сломает пропорции.
+   РЯДЫ КОНТЕНТА
    ============================================= */
 .grid {
   display: grid;
@@ -108,10 +101,10 @@ body {
 }
 
 /* =============================================
-   ЯЧЕЙКИ — базовые стили общие для всех типов.
+   ЯЧЕЙКИ
    ============================================= */
 .cell {
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-right: 1px solid var(--c-gold-mid);
   border-bottom: 1px solid var(--c-gold-mid);
   display: flex;
@@ -125,7 +118,7 @@ body {
 
 .cell-idea {
   flex: 3;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-right: 1px solid var(--c-gold-mid);
   display: flex;
   flex-direction: column;
@@ -133,11 +126,12 @@ body {
 }
 .cell-rice {
   flex: 1;
-  padding: 6px 8px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
+.cell-rice .lined { border-right: 1px solid var(--c-gold-mid); }
 
 /* =============================================
    ЗАГОЛОВКИ БЛОКОВ
@@ -145,38 +139,38 @@ body {
 .block-head {
   display: flex;
   align-items: baseline;
-  gap: 5px;
-  margin-bottom: 2px;
+  gap: 6px;
+  margin-bottom: 3px;
   flex-shrink: 0;
 }
 .bn {
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 32px; /* Крупные номера */
+  font-weight: 900;
   color: var(--c-gold);
   line-height: 1;
 }
 .bname {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--c-brown);
-  letter-spacing: 0.07em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 .bhint {
-  font-size: 8.5px;
+  font-size: 10px;
   color: var(--c-brown-hint);
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   flex-shrink: 0;
+  font-style: italic;
 }
 
 /* =============================================
-   ЛИНОВАННЫЕ ПОЛЯ — единый класс для блоков 1-6.
-   flex: 1 — занимает всё доступное место в ячейке.
+   ЛИНОВАННЫЕ ПОЛЯ
    ============================================= */
 .lined {
   flex: 1;
   border: var(--border-cell);
-  border-radius: 4px;
+  border-radius: 5px;
   background: var(--c-bg-field);
   overflow: hidden;
   display: flex;
@@ -185,10 +179,7 @@ body {
 }
 
 /* =============================================
-   СТРОКИ — единый класс для .lr, .cbr, .rice-row.
-   flex: 1 — строки делят высоту поля поровну.
-   min-height убран — при фиксированной высоте карточки
-   строки растягиваются корректно через flex: 1.
+   СТРОКИ
    ============================================= */
 .row {
   flex: 1;
@@ -200,17 +191,17 @@ body {
 .row:last-child { border-bottom: none; }
 
 /* =============================================
-   НУМЕРАЦИЯ — единый класс для .ln и .rice-ln.
-   Раньше было два одинаковых класса — объединены.
+   НУМЕРАЦИЯ
    ============================================= */
 .ln {
-  width: 15px;
-  min-width: 15px;
+  width: 18px;
+  min-width: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 7.5px;
-  color: var(--c-gold-mid);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-gold);
   border-right: var(--border-line);
   background: var(--c-bg-num);
   flex-shrink: 0;
@@ -220,48 +211,48 @@ body {
 
 /* =============================================
    ГИПОТЕЗА — чекбоксы
-   Ширина .cbc задаётся через JS по ширине колонки Total.
-   НЕ задавать ширину в CSS — сломает выравнивание.
    ============================================= */
 .cba { flex: 1; }
 .cbc {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 6px;
   border-left: var(--border-line);
   background: var(--c-bg-num);
+  flex-shrink: 0;
+  width: 70px;
 }
 .cb {
-  width: 12px;
-  height: 12px;
-  border: var(--border-cell);
-  border-radius: 2px;
-  background: var(--c-bg-field);
+  width: 14px;
+  height: 14px;
+  border: 0.8px solid var(--c-gold-mid);
+  border-radius: 3px;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 7.5px;
+  font-size: 9px;
+  font-weight: 700;
 }
 .cb-ok { color: var(--c-brown); }
 .cb-no { color: var(--c-gold); }
 
 /* =============================================
-   RICE — таблица (блок 7, не трогать)
-   .rice-table наследует стили .lined через класс.
-   .ln используется тот же что и в блоках 1-6.
+   RICE — таблица
    ============================================= */
 .rice-head-row {
   display: flex;
-  padding-left: 15px;
-  margin-bottom: 2px;
-  height: 14px;
+  padding-left: 18px;
+  margin-bottom: 3px;
+  height: 16px;
   align-items: center;
   flex-shrink: 0;
 }
 .rice-ch {
   flex: 1;
   text-align: center;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--c-brown);
   border-right: var(--border-line);
@@ -269,72 +260,70 @@ body {
 }
 .rice-ch:last-child { border-right: none; color: var(--c-gold); }
 .rice-cell { flex: 1; border-right: var(--border-line); }
-.rice-cell.total { border-right: none; background: var(--c-bg-num); }
+.rice-cell.total { 
+  border-right: none; 
+  background: var(--c-bg-num);
+  font-weight: 700;
+  color: var(--c-gold);
+}
 
 /* =============================================
-   ПОДВАЛ — фиксированная высота, не тянется.
-   flex-shrink: 0 аналогично шапке.
+   ПОДВАЛ
    ============================================= */
 .footer {
   border-top: var(--border-main);
-  padding: 6px 16px;
+  padding: 8px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: var(--c-bg-footer);
   flex-shrink: 0;
 }
-.footer p { font-size: 9px; color: var(--c-brown); }
+.footer p { font-size: 10px; color: var(--c-brown); }
 .footer a { color: var(--c-brown); font-weight: 700; text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
 
 /* =============================================
-   КНОПКА ПЕЧАТИ — фиксированная поверх страницы.
-   Скрывается при печати через @media print.
+   КОНТЕЙНЕР КНОПОК — позиция вычисляется JS
    ============================================= */
-.print-btn {
+.controls {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  background: var(--c-dark);
-  color: var(--c-text-light);
-  border: 1.5px solid var(--c-gold);
-  border-radius: 6px;
-  padding: 8px 18px;
-  font-size: 12px;
-  font-family: 'PT Sans', Georgia, sans-serif;
-  cursor: pointer;
-  letter-spacing: 0.05em;
-}
-.print-btn:hover { background: var(--c-gold); color: var(--c-dark); }
-
-/* =============================================
-   ПЕРЕКЛЮЧАТЕЛИ — показывают пустой шаблон или пример
-   ============================================= */
-.toggle-controls {
-  position: fixed;
-  top: 20px;
+  bottom: 20px; /* Фолбэк */
   right: 20px;
-  z-index: 1001;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.controls-row {
   display: flex;
   gap: 8px;
 }
-.toggle-btn {
+.control-btn {
   background: var(--c-dark);
   color: var(--c-text-light);
   border: 1.5px solid var(--c-gold);
   border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 12px;
+  padding: 10px 20px;
+  font-size: 13px;
   font-family: 'PT Sans', Georgia, sans-serif;
   cursor: pointer;
   letter-spacing: 0.05em;
+  font-weight: 600;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
 }
-.toggle-btn:hover, .toggle-btn.active { background: var(--c-gold); color: var(--c-dark); }
+.control-btn:hover, .control-btn.active {
+  background: var(--c-gold);
+  color: var(--c-dark);
+}
 
 /* =============================================
-   ПРИМЕР — контейнер для картинки-оверлея
+   ПРИМЕР
    ============================================= */
 #example {
   width: var(--card-w);
@@ -343,29 +332,28 @@ body {
   display: none;
   position: relative;
   transform-origin: center center;
+  border: 2px solid var(--c-gold);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 32px rgba(44,26,14,0.13);
 }
 #example img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 10px;
-  box-shadow: 0 4px 32px rgba(44,26,14,0.13);
+  display: block;
 }
 
 /* =============================================
    ПЕЧАТЬ
-   @page убирает поля браузера — карточка заполняет лист целиком.
-   print-color-adjust: exact — сохраняет все фоновые цвета.
-   transform: none — отменяет JS-масштаб, браузер сам впишет в лист.
-   height: auto — карточка по содержимому, не обрезается.
    ============================================= */
 @page { size: A4 landscape; margin: 0; }
 
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background: var(--c-bg); overflow: visible; margin: 0; padding: 0; }
-  .print-btn, .toggle-controls { display: none; }
-  #example { display: none !important; } /* При печати всегда показываем пустой шаблон */
+  body { background: white; overflow: visible; margin: 0; padding: 0; display: block; height: auto; }
+  .controls { display: none !important; }
+  #example { display: none !important; }
   .card {
     transform: none !important;
     visibility: visible !important;
@@ -376,6 +364,7 @@ body {
     page-break-inside: avoid;
     margin: 0 !important;
     padding: 0 !important;
+    border: 1px solid #ccc !important;
   }
 }
 
@@ -383,22 +372,15 @@ body {
 </head>
 <body>
 
-<!-- Переключатели -->
-<div class="toggle-controls">
-  <button class="toggle-btn active" onclick="showEmpty()">Пустой шаблон</button>
-  <button class="toggle-btn" onclick="showExample()">Пример заполнения</button>
-</div>
-
 <!-- Пустой канвас -->
 <div class="card" id="card">
-
   <div class="header">
     <p class="header-title">Монополия гипотез</p>
   </div>
 
   <div class="grid g4">
     <div class="cell">
-      <div class="block-head"><span class="bn">1</span><span class="bname">Факты</span></div>
+      <div class="block-head"><span class="bn">1</span><span class="bname">Факт</span></div>
       <p class="bhint">Паттерн</p>
       <div class="lined">
         <div class="row"><div class="ln">1</div><div class="la"></div></div>
@@ -423,11 +405,11 @@ body {
       <div class="block-head"><span class="bn">3</span><span class="bname">Гипотеза</span></div>
       <p class="bhint">Паттерн происходит потому, что...</p>
       <div class="lined">
-        <div class="row"><div class="ln">1</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
-        <div class="row"><div class="ln">2</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no"></div></div></div>
-        <div class="row"><div class="ln">3</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
-        <div class="row"><div class="ln">4</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
-        <div class="row"><div class="ln">5</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no"></div></div></div>
+        <div class="row"><div class="ln">1</div><div class="cba"></div><div class="cbc"><span class="cb cb-ok">✓</span><span class="cb cb-no">✗</span></div></div>
+        <div class="row"><div class="ln">2</div><div class="cba"></div><div class="cbc"><span class="cb cb-ok">✓</span><span class="cb cb-no">✗</span></div></div>
+        <div class="row"><div class="ln">3</div><div class="cba"></div><div class="cbc"><span class="cb cb-ok">✓</span><span class="cb cb-no">✗</span></div></div>
+        <div class="row"><div class="ln">4</div><div class="cba"></div><div class="cbc"><span class="cb cb-ok">✓</span><span class="cb cb-no">✗</span></div></div>
+        <div class="row"><div class="ln">5</div><div class="cba"></div><div class="cbc"><span class="cb cb-ok">✓</span><span class="cb cb-no">✗</span></div></div>
       </div>
     </div>
   </div>
@@ -492,56 +474,62 @@ body {
     <p>© Елена Безгласная, 2026</p>
     <p>Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></p>
   </div>
-
-</div><!-- /card -->
+</div>
 
 <!-- Пример картинкой -->
 <div class="card" id="example">
   <img src="example-filled.png" alt="Пример заполнения канваса">
 </div>
 
-<button class="print-btn" onclick="window.print()">⬇ Скачать PDF</button>
+<!-- Кнопки -->
+<div class="controls">
+  <div class="controls-row">
+    <button class="control-btn active" onclick="showEmpty()">Пустой шаблон</button>
+    <button class="control-btn" onclick="showExample()">Пример</button>
+  </div>
+  <div class="controls-row">
+    <a href="https://t.me/wright_test_bot" target="_blank" class="control-btn">Изучить термины</a>
+    <button class="control-btn pdf-btn" onclick="window.print()">Скачать PDF</button>
+  </div>
+</div>
 
 <script>
-// =============================================
-// КОНСТАНТЫ
-// Базовый размер карточки — якорь для масштабирования.
-// Менять только если меняется var(--card-w) в CSS.
-// =============================================
 var CARD_W = 1100;
 var CARD_H = 778;
 
-// =============================================
-// alignCheckboxes — выравнивает чекбоксы по ширине колонки Total.
-// Вызывается один раз при загрузке — ширина Total не меняется при resize.
-// =============================================
 function alignCheckboxes() {
   var totalCell = document.querySelector('.rice-cell.total');
   if (!totalCell) return;
   var totalWidth = totalCell.getBoundingClientRect().width;
   document.querySelectorAll('.cbc').forEach(function(cbc) {
     cbc.style.width = totalWidth + 'px';
-    cbc.style.flexShrink = '0';
   });
 }
 
-// =============================================
-// scaleCard — масштабирует активный элемент под экран.
-// transform: scale() + учёт ширины/высоты viewport.
-// =============================================
+function positionControls() {
+  var active = document.getElementById('card').style.display !== 'none' ? document.getElementById('card') : document.getElementById('example');
+  var controls = document.querySelector('.controls');
+  if (!active || !controls) return;
+  requestAnimationFrame(function() {
+    var rect = active.getBoundingClientRect();
+    controls.style.bottom = (window.innerHeight - rect.bottom + 16) + 'px';
+  });
+}
+
 function scaleCard() {
   var scaleX = document.documentElement.clientWidth / CARD_W;
   var scaleY = document.documentElement.clientHeight / CARD_H;
   var scale = Math.min(scaleX, scaleY) * 0.98;
+  
   var card = document.getElementById('card');
   var example = document.getElementById('example');
+  
   if (card && card.style.display !== 'none') card.style.transform = 'scale(' + scale + ')';
   if (example && example.style.display !== 'none') example.style.transform = 'scale(' + scale + ')';
+  
+  positionControls();
 }
 
-// =============================================
-// showCard — убирает visibility: hidden.
-// =============================================
 function showCard() {
   var card = document.getElementById('card');
   var example = document.getElementById('example');
@@ -549,14 +537,12 @@ function showCard() {
   if (example) example.style.visibility = 'visible';
 }
 
-// =============================================
-// Переключатели шаблонов
-// =============================================
 function showEmpty() {
   document.getElementById('card').style.display = 'flex';
   document.getElementById('example').style.display = 'none';
-  document.querySelectorAll('.toggle-btn')[0].classList.add('active');
-  document.querySelectorAll('.toggle-btn')[1].classList.remove('active');
+  document.querySelectorAll('.control-btn')[0].classList.add('active');
+  document.querySelectorAll('.control-btn')[1].classList.remove('active');
+  document.querySelector('.pdf-btn').style.display = 'inline-flex';
   alignCheckboxes();
   scaleCard();
 }
@@ -564,14 +550,12 @@ function showEmpty() {
 function showExample() {
   document.getElementById('card').style.display = 'none';
   document.getElementById('example').style.display = 'block';
-  document.querySelectorAll('.toggle-btn')[0].classList.remove('active');
-  document.querySelectorAll('.toggle-btn')[1].classList.add('active');
+  document.querySelectorAll('.control-btn')[0].classList.remove('active');
+  document.querySelectorAll('.control-btn')[1].classList.add('active');
+  document.querySelector('.pdf-btn').style.display = 'none';
   scaleCard();
 }
 
-// =============================================
-// Debounce для resize
-// =============================================
 var resizeTimer;
 window.addEventListener('resize', function() {
   clearTimeout(resizeTimer);
@@ -581,9 +565,6 @@ window.addEventListener('resize', function() {
   }, 150);
 });
 
-// =============================================
-// Точка входа
-// =============================================
 window.addEventListener('load', function() {
   alignCheckboxes();
   scaleCard();
