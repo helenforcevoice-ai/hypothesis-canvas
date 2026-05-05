@@ -40,10 +40,13 @@ body {
   font-family: 'PT Sans', Georgia, sans-serif;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: flex-start; /* ИЗМЕНЕНО: прижимаем влево */
+  /* ИЗМЕНЕНО: прижимаем влево и вверх */
+  align-items: flex-start; 
+  justify-content: flex-start; 
   height: 100vh;
   margin: 0;
+  /* ИЗМЕНЕНО: отступы слева и сверху по 20px */
+  padding: 20px 0 0 20px; 
 }
 
 /* =============================================
@@ -60,8 +63,9 @@ body {
   box-shadow: 0 4px 32px rgba(44,26,14,0.13);
   display: flex;
   flex-direction: column;
-  transform-origin: center center;
-  margin-left: 20px; /* ИЗМЕНЕНО: отступ слева */
+  /* Масштабируем от левого верхнего угла, чтобы не обрезалось */
+  transform-origin: top left; 
+  margin: 0; 
 }
 
 /* =============================================
@@ -331,7 +335,7 @@ body {
   visibility: hidden;
   display: none;
   position: relative;
-  transform-origin: center center;
+  transform-origin: top left; /* Также масштабируем от левого верхнего угла */
   border: 2px solid var(--c-gold);
   border-radius: 10px;
   overflow: hidden;
@@ -517,10 +521,11 @@ function positionControls() {
 }
 
 function scaleCard() {
-  // ИЗМЕНЕНО: вычитаем отступ 20px, чтобы масштаб учитывал margin-left и не обрезался
+  // Учитываем padding: 20px сверху и слева
   var availableWidth = document.documentElement.clientWidth - 20;
+  var availableHeight = document.documentElement.clientHeight - 20;
   var scaleX = availableWidth / CARD_W;
-  var scaleY = document.documentElement.clientHeight / CARD_H;
+  var scaleY = availableHeight / CARD_H;
   var scale = Math.min(scaleX, scaleY) * 0.98;
   
   var card = document.getElementById('card');
