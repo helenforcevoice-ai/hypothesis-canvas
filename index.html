@@ -250,6 +250,48 @@ body {
 .footer p { font-size: 9px; color: #6B4C2A; }
 .footer a { color: #6B4C2A; font-weight: 700; text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
+/* КНОПКА ПЕЧАТИ */
+.print-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  background: #2C1A0E;
+  color: #F5F0E4;
+  border: 1.5px solid #B8933A;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 12px;
+  font-family: 'PT Sans', Georgia, sans-serif;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+}
+.print-btn:hover { background: #B8933A; color: #2C1A0E; }
+
+/* ПЕЧАТЬ */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body { background: #F0EAD8; padding: 0; margin: 0; }
+
+  .print-btn { display: none; }
+
+  .card-wrapper {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    overflow: visible !important;
+  }
+
+  .card {
+    position: static !important;
+    transform: none !important;
+    visibility: visible !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+}
 </style>
 </head>
 <body>
@@ -376,6 +418,7 @@ body {
 
 </div><!-- /card -->
 </div><!-- /card-wrapper -->
+<button class="print-btn" onclick="window.print()">⬇ Скачать PDF</button>
 <script>
 var CARD_W = 1100;
 
