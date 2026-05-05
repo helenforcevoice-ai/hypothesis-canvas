@@ -1,298 +1,239 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Монополия гипотез — Канвас</title>
-  <style>
-    :root {
-      --bg-canvas: #f5f0e6;
-      --text-main: #2c1e16;
-      --border: #c9b8a3;
-      --header-bg: #3a2b1f;
-      --header-text: #ffffff;
-      --accent: #8c7a6b;
-      /* Фиксированная ширина для выравнивания трех элементов */
-      --align-width: 65px; 
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: #e8e2d8;
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-      font-family: system-ui, -apple-system, sans-serif;
-      color: var(--text-main);
-    }
-    .page {
-      width: 297mm;
-      height: 210mm;
-      background: var(--bg-canvas);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-      border-radius: 4px;
-    }
-    /* Полупрозрачный фон */
-    .bg-overlay {
-      position: absolute;
-      inset: 0;
-      background: url('pic.png') center/cover no-repeat;
-      opacity: 0.35;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .canvas {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    /* Шапка */
-    .canvas-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--header-bg);
-      color: var(--header-text);
-      padding: 10px 16px;
-      border-radius: 6px;
-      flex-shrink: 0;
-    }
-    .canvas-header h1 { font-size: 1.3rem; font-weight: 600; letter-spacing: 0.5px; }
-    .card-number {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    .card-number input {
-      width: var(--align-width);
-      padding: 4px 6px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: #fff;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    /* Сетка блоков */
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
-      gap: 10px;
-      flex: 1;
-    }
-    .block {
-      background: rgba(255,255,255,0.65);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .block-title {
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-      color: var(--header-bg);
-      border-bottom: 2px solid var(--accent);
-      padding-bottom: 3px;
-    }
-    .block-subtitle {
-      font-size: 0.7rem;
-      color: #6b5d4f;
-      margin-bottom: 6px;
-      font-style: italic;
-    }
-    .lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-    .line {
-      border-bottom: 1px dashed var(--border);
-      height: 100%;
-      position: relative;
-      padding-left: 14px;
-    }
-    .line::before {
-      content: attr(data-num);
-      position: absolute;
-      left: 0;
-      top: -2px;
-      font-size: 0.65rem;
-      color: #9a8b7c;
-    }
-    /* Блок 3: Чекбоксы */
-    .checkbox-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 0.8rem;
-    }
-    .checkbox-group {
-      display: flex;
-      gap: 8px;
-      width: var(--align-width); /* Фиксированная ширина */
-      justify-content: flex-end; /* Прижат вправо */
-    }
-    .checkbox {
-      width: 18px;
-      height: 18px;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      background: #fff;
-    }
-    /* Блок 7: RICE */
-    .rice-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      flex: 1;
-    }
-    .rice-table th, .rice-table td {
-      border: 1px solid var(--border);
-      padding: 6px 4px;
-      text-align: center;
-    }
-    .rice-table th {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 600;
-    }
-    .total-col {
-      width: var(--align-width); /* Фиксированная ширина */
-      background: rgba(255,255,255,0.85);
-    }
-    /* Позиционирование блоков в сетке */
-    .b1 { grid-column: 1; grid-row: 1; }
-    .b2 { grid-column: 2; grid-row: 1; }
-    .b3 { grid-column: 3; grid-row: 1; }
-    .b4 { grid-column: 1 / 3; grid-row: 2; }
-    .b5 { grid-column: 3; grid-row: 2; }
-    .b6 { grid-column: 1 / 3; grid-row: 3; }
-    .b7 { grid-column: 3; grid-row: 3; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Монополия гипотез</title>
+<style>
+  :root {
+    --align-w: 72px; /* Единая ширина для выравнивания */
+    --border: #c9b8a3;
+    --bg: #f9f6f0;
+    --text: #2c1e16;
+    --sub: #6b5d4f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+    color: var(--text);
+  }
+  .a4-page {
+    width: 297mm;
+    height: 210mm;
+    background: var(--bg);
+    padding: 14mm;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  /* Шапка */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--text);
+    flex-shrink: 0;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+  .card-num {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .card-num input {
+    width: var(--align-w);
+    padding: 4px;
+    border: 1px solid var(--border);
+    text-align: center;
+    font-size: 14px;
+  }
 
-    footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #7a6b5d;
-      flex-shrink: 0;
-      padding-top: 4px;
-    }
-    footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  /* Ряды блоков */
+  .row { display: flex; gap: 10px; flex: 1; min-height: 0; }
+  .col { flex: 1; display: flex; flex-direction: column; }
+  .row-3 .col { flex: 1; }
+  .row-2 .col:first-child { flex: 2; }
+  .row-2 .col:last-child { flex: 1; }
 
-    /* Печать */
-    @media print {
-      body { background: none; padding: 0; }
-      .page { box-shadow: none; border-radius: 0; width: 100%; height: 100%; }
-      .bg-overlay { opacity: 0.25; }
-      .block { background: #fff; }
-    }
-  </style>
+  /* Блоки */
+  .block {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .block h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+  }
+  .block .sub {
+    font-size: 11px;
+    font-style: italic;
+    color: var(--sub);
+    margin-bottom: 8px;
+  }
+  .lines { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .line {
+    border-bottom: 1px dashed var(--border);
+    height: 100%;
+    padding-left: 16px;
+    font-size: 12px;
+    color: #888;
+    position: relative;
+  }
+  .line::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0;
+    top: -2px;
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  /* Выравнивание чекбоксов */
+  .check-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .check-group {
+    width: var(--align-w);
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .check { width: 14px; height: 14px; border: 1px solid var(--border); }
+
+  /* Таблица RICE */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; flex: 1; }
+  th, td { border: 1px solid var(--border); padding: 4px; text-align: center; }
+  th { background: #e8e0d4; font-weight: 600; }
+  .col-total { width: var(--align-w); }
+
+  /* Footer */
+  footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #7a6b5d;
+    padding-top: 6px;
+    flex-shrink: 0;
+  }
+  footer a { color: var(--sub); text-decoration: none; }
+
+  @media print {
+    body { background: none; padding: 0; }
+    .a4-page { box-shadow: none; width: 100%; height: 100%; padding: 10mm; }
+  }
+</style>
 </head>
 <body>
-  <div class="page">
-    <div class="bg-overlay"></div>
-    <div class="canvas">
-      <header class="canvas-header">
-        <h1>Монополия гипотез</h1>
-        <div class="card-number">
-          Карточка № <input type="text" placeholder="">
+  <div class="a4-page">
+    <header class="header">
+      <h1>Монополия гипотез</h1>
+      <div class="card-num">Карточка № <input type="text"></div>
+    </header>
+
+    <div class="row row-3">
+      <div class="col block">
+        <h3>1 Факты</h3>
+        <div class="sub">Паттерн</div>
+        <div class="lines">
+          <div class="line" data-n="1"></div><div class="line" data-n="2"></div>
+          <div class="line" data-n="3"></div><div class="line" data-n="4"></div>
+          <div class="line" data-n="5"></div>
         </div>
-      </header>
-      <div class="grid-container">
-        <section class="block b1">
-          <div class="block-title">1 Факты</div>
-          <div class="block-subtitle">Паттерн</div>
-          <div class="lines">
-            <div class="line" data-num="1"></div>
-            <div class="line" data-num="2"></div>
-            <div class="line" data-num="3"></div>
-            <div class="line" data-num="4"></div>
-            <div class="line" data-num="5"></div>
-          </div>
-        </section>
-        <section class="block b2">
-          <div class="block-title">2 Вопрос к паттерну</div>
-          <div class="block-subtitle">Почему? Как? Зачем?</div>
-          <div class="lines">
-            <div class="line" data-num="1"></div>
-            <div class="line" data-num="2"></div>
-            <div class="line" data-num="3"></div>
-            <div class="line" data-num="4"></div>
-            <div class="line" data-num="5"></div>
-          </div>
-        </section>
-        <section class="block b3">
-          <div class="block-title">3 Гипотеза</div>
-          <div class="block-subtitle">Паттерн происходит потому, что...</div>
-          <div class="lines">
-            <div class="checkbox-row">1 <div class="checkbox-group"><div class="checkbox"></div><div class="checkbox"></div></div></div>
-            <div class="checkbox-row">2 <div class="checkbox-group"><div class="checkbox"></div><div class="checkbox"></div></div></div>
-            <div class="checkbox-row">3 <div class="checkbox-group"><div class="checkbox"></div><div class="checkbox"></div></div></div>
-            <div class="checkbox-row">4 <div class="checkbox-group"><div class="checkbox"></div><div class="checkbox"></div></div></div>
-            <div class="checkbox-row">5 <div class="checkbox-group"><div class="checkbox"></div><div class="checkbox"></div></div></div>
-          </div>
-        </section>
-        <section class="block b4">
-          <div class="block-title">4 Механизм</div>
-          <div class="block-subtitle">Это работает так:...</div>
-          <div class="lines">
-            <div class="line" data-num="1"></div>
-            <div class="line" data-num="2"></div>
-            <div class="line" data-num="3"></div>
-            <div class="line" data-num="4"></div>
-            <div class="line" data-num="5"></div>
-          </div>
-        </section>
-        <section class="block b5">
-          <div class="block-title">5 Инсайт</div>
-          <div class="block-subtitle">Что теперь знаем? (после проверки гипотез)</div>
-          <div class="lines">
-            <div class="line" data-num="1"></div>
-            <div class="line" data-num="2"></div>
-            <div class="line" data-num="3"></div>
-            <div class="line" data-num="4"></div>
-            <div class="line" data-num="5"></div>
-          </div>
-        </section>
-        <section class="block b6">
-          <div class="block-title">6 Идея</div>
-          <div class="block-subtitle">Делаем...</div>
-          <div class="lines">
-            <div class="line" data-num="1"></div>
-            <div class="line" data-num="2"></div>
-            <div class="line" data-num="3"></div>
-            <div class="line" data-num="4"></div>
-            <div class="line" data-num="5"></div>
-          </div>
-        </section>
-        <section class="block b7">
-          <div class="block-title">7 RICE</div>
-          <table class="rice-table">
-            <thead><tr><th>R</th><th>I</th><th>C</th><th>E</th><th class="total-col">Total</th></tr></thead>
-            <tbody>
-              <tr><td></td><td></td><td></td><td></td><td class="total-col"></td></tr>
-              <tr><td></td><td></td><td></td><td></td><td class="total-col"></td></tr>
-              <tr><td></td><td></td><td></td><td></td><td class="total-col"></td></tr>
-              <tr><td></td><td></td><td></td><td></td><td class="total-col"></td></tr>
-              <tr><td></td><td></td><td></td><td></td><td class="total-col"></td></tr>
-            </tbody>
-          </table>
-        </section>
       </div>
-      <footer>
-        <span>© Елена Безгласная, 2026</span>
-        <span>Тренажёр: <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></span>
-      </footer>
+      <div class="col block">
+        <h3>2 Вопрос к паттерну</h3>
+        <div class="sub">Почему? Как? Зачем?</div>
+        <div class="lines">
+          <div class="line" data-n="1"></div><div class="line" data-n="2"></div>
+          <div class="line" data-n="3"></div><div class="line" data-n="4"></div>
+          <div class="line" data-n="5"></div>
+        </div>
+      </div>
+      <div class="col block">
+        <h3>3 Гипотеза</h3>
+        <div class="sub">Паттерн происходит потому, что...</div>
+        <div class="lines">
+          <div class="check-row">1 <div class="check-group"><div class="check"></div><div class="check"></div></div></div>
+          <div class="check-row">2 <div class="check-group"><div class="check"></div><div class="check"></div></div></div>
+          <div class="check-row">3 <div class="check-group"><div class="check"></div><div class="check"></div></div></div>
+          <div class="check-row">4 <div class="check-group"><div class="check"></div><div class="check"></div></div></div>
+          <div class="check-row">5 <div class="check-group"><div class="check"></div><div class="check"></div></div></div>
+        </div>
+      </div>
     </div>
+
+    <div class="row row-2">
+      <div class="col block">
+        <h3>4 Механизм</h3>
+        <div class="sub">Это работает так:...</div>
+        <div class="lines">
+          <div class="line" data-n="1"></div><div class="line" data-n="2"></div>
+          <div class="line" data-n="3"></div><div class="line" data-n="4"></div>
+          <div class="line" data-n="5"></div>
+        </div>
+      </div>
+      <div class="col block">
+        <h3>5 Инсайт</h3>
+        <div class="sub">Что теперь знаем? (после проверки гипотез)</div>
+        <div class="lines">
+          <div class="line" data-n="1"></div><div class="line" data-n="2"></div>
+          <div class="line" data-n="3"></div><div class="line" data-n="4"></div>
+          <div class="line" data-n="5"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-2">
+      <div class="col block">
+        <h3>6 Идея</h3>
+        <div class="sub">Делаем...</div>
+        <div class="lines">
+          <div class="line" data-n="1"></div><div class="line" data-n="2"></div>
+          <div class="line" data-n="3"></div><div class="line" data-n="4"></div>
+          <div class="line" data-n="5"></div>
+        </div>
+      </div>
+      <div class="col block">
+        <h3>7 RICE</h3>
+        <table>
+          <thead><tr><th>R</th><th>I</th><th>C</th><th>E</th><th class="col-total">Total</th></tr></thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td class="col-total"></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td class="col-total"></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td class="col-total"></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td class="col-total"></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td class="col-total"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      <span>© Елена Безгласная, 2026</span>
+      <span>Тренажёр: <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></span>
+    </footer>
   </div>
 </body>
 </html>
