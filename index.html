@@ -41,10 +41,9 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Канвас слева */
+  justify-content: flex-start; /* ИЗМЕНЕНО: прижимаем влево */
   height: 100vh;
   margin: 0;
-  padding-left: 20px; /* Отступ слева */
 }
 
 /* =============================================
@@ -62,6 +61,7 @@ body {
   display: flex;
   flex-direction: column;
   transform-origin: center center;
+  margin-left: 20px; /* ИЗМЕНЕНО: отступ слева */
 }
 
 /* =============================================
@@ -288,7 +288,7 @@ body {
    ============================================= */
 .controls {
   position: fixed;
-  bottom: 20px; /* Фолбэк */
+  bottom: 20px;
   right: 20px;
   z-index: 1000;
   display: flex;
@@ -517,7 +517,9 @@ function positionControls() {
 }
 
 function scaleCard() {
-  var scaleX = document.documentElement.clientWidth / CARD_W;
+  // ИЗМЕНЕНО: вычитаем отступ 20px, чтобы масштаб учитывал margin-left и не обрезался
+  var availableWidth = document.documentElement.clientWidth - 20;
+  var scaleX = availableWidth / CARD_W;
   var scaleY = document.documentElement.clientHeight / CARD_H;
   var scale = Math.min(scaleX, scaleY) * 0.98;
   
