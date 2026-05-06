@@ -6,9 +6,6 @@
 <title>Монополия гипотез — Канвас</title>
 <style>
 
-/* =============================================
-   ПЕРЕМЕННЫЕ
-   ============================================= */
 :root {
   --c-dark:       #2C1A0E;
   --c-gold:       #B8933A;
@@ -22,7 +19,6 @@
   --c-bg-num:     #F5EED8;
   --c-bg-footer:  #EDE5D0;
   --c-text-light: #F5F0E4;
-
   --card-w: 1100px;
   --card-h: 778px;
   --border-main: 1.5px solid var(--c-gold);
@@ -30,17 +26,16 @@
   --border-line: 0.5px solid var(--c-gold-light);
 }
 
-/* =============================================
-   СБРОС
-   ============================================= */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  overflow: hidden;
-}
+html { overflow: hidden; }
 
 body {
-  background: var(--c-bg);
+  background-color: var(--c-bg);
+  background-image: url('pic.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-family: 'PT Sans', Georgia, sans-serif;
   overflow: hidden;
   width: 100vw;
@@ -48,13 +43,17 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(240, 234, 216, 0.84);
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* =============================================
-   КАРТОЧКА — фиксированный А4 альбомный.
-   Кнопки внутри шапки — масштабируются вместе с карточкой.
-   visibility: hidden до JS — без мигания при загрузке.
-   ============================================= */
 .card {
   width: var(--card-w);
   height: var(--card-h);
@@ -66,13 +65,10 @@ body {
   box-shadow: 0 4px 32px rgba(44,26,14,0.13);
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
-/* =============================================
-   ШАПКА — содержит название и кнопки.
-   Кнопки внутри карточки — всегда видны при переключении.
-   flex-shrink: 0 — не участвует в делении высоты рядами.
-   ============================================= */
 .header {
   background: var(--c-dark);
   padding: 0 16px;
@@ -93,8 +89,8 @@ body {
 .header-buttons {
   display: flex;
   gap: 6px;
-  flex: 1; /* растягивается на всю оставшуюся ширину шапки */
-  justify-content: flex-end; /* кнопки прижаты вправо */
+  flex: 1;
+  justify-content: flex-end;
 }
 .hbtn {
   background: transparent;
@@ -111,64 +107,114 @@ body {
   display: inline-flex;
   align-items: center;
 }
-.hbtn:hover {
-  border-color: rgba(245,240,228,0.8);
-  background: rgba(245,240,228,0.08);
-}
-.hbtn.active {
-  border-color: var(--c-gold);
-  color: var(--c-gold);
-}
+.hbtn:hover { border-color: rgba(245,240,228,0.8); background: rgba(245,240,228,0.08); }
+.hbtn.active { border-color: var(--c-gold); color: var(--c-gold); }
 
-/* =============================================
-   ПРИМЕР — img между шапкой и подвалом.
-   Скрыт по умолчанию, показывается вместо рядов.
-   ============================================= */
-.example-view {
-  display: none;
-  flex: 1;
-  overflow: hidden;
-  min-height: 0;
-}
-.example-view img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* =============================================
-   ОБЁРТКА РЯДОВ — переключается при showExample/showEmpty.
-   ============================================= */
 .rows-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
+  position: relative;
 }
 
-/* =============================================
-   РЯДЫ — три ряда делят высоту поровну.
-   ============================================= */
-.grid {
-  display: grid;
-  flex: 1;
-  border-top: var(--border-main);
-  min-height: 0;
+.stickers-layer {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
 }
+.stickers-layer.visible { display: block; }
+
+.example-caption {
+  display: none;
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--c-brown-hint);
+  font-style: italic;
+  white-space: nowrap;
+  pointer-events: none;
+  background: rgba(245,240,228,0.82);
+  padding: 2px 8px;
+  border-radius: 3px;
+  z-index: 11;
+}
+.example-caption.visible { display: block; }
+
+.sticker { position: absolute; width: 108px; height: 96px; }
+.sticker-back {
+  position: absolute;
+  width: 108px; height: 96px;
+  background: #F5EE9A;
+  border-radius: 2px;
+  box-shadow: 2px 3px 6px rgba(0,0,0,0.18);
+  top: 0; left: 0;
+}
+.sticker-front {
+  position: absolute;
+  width: 108px; height: 96px;
+  background: #D4EDA0;
+  border-radius: 2px;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.13);
+  top: 4px; left: 4px;
+  padding: 17px 9px 12px 9px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: visible;
+}
+.sticker-front p {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 10.5px;
+  line-height: 1.32;
+  color: #3a2a10;
+  text-align: center;
+  margin: 0;
+}
+.sticker-pin {
+  position: absolute;
+  top: -5px; left: 50%;
+  transform: translateX(-50%);
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #ff6b6b, #c0392b 60%, #7b1a1a);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  z-index: 2;
+}
+.sticker-pin::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.55);
+}
+.sticker-corner {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 20px; height: 20px;
+  overflow: hidden;
+  z-index: 2;
+}
+.sticker-corner::before {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent rgba(0,0,0,0.20) transparent;
+}
+
+.grid { display: grid; flex: 1; border-top: var(--border-main); min-height: 0; }
 .g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 .grid.row2 { border-top: 1px solid var(--c-gold-mid); }
+.row3 { display: flex; flex: 1; border-top: var(--border-main); min-height: 0; }
 
-.row3 {
-  display: flex;
-  flex: 1;
-  border-top: var(--border-main);
-  min-height: 0;
-}
-
-/* =============================================
-   ЯЧЕЙКИ
-   ============================================= */
 .cell {
   padding: 6px 8px;
   border-right: 1px solid var(--c-gold-mid);
@@ -181,227 +227,123 @@ body {
 .cell.nb { border-bottom: none; }
 .span2 { grid-column: span 2; }
 .span3 { grid-column: span 3; }
-
 .cell-idea {
-  flex: 3;
-  padding: 6px 8px;
+  flex: 3; padding: 6px 8px;
   border-right: 1px solid var(--c-gold-mid);
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
+  display: flex; flex-direction: column; min-height: 0;
 }
-.cell-rice {
-  flex: 1;
-  padding: 6px 8px;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
+.cell-rice { flex: 1; padding: 6px 8px; display: flex; flex-direction: column; min-height: 0; }
 
-/* =============================================
-   ТИПОГРАФИКА БЛОКОВ.
-   Иерархия: крупный номер (якорь) → название (метка) → подсказка.
-   ============================================= */
-.block-head {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  margin-bottom: 2px;
-  flex-shrink: 0;
-}
-.bn {
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--c-gold);
-  line-height: 1;
-  font-family: Georgia, serif;
-}
-.bname {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--c-brown);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.bhint {
-  font-size: 10px;
-  color: var(--c-brown-hint);
-  margin-bottom: 5px;
-  flex-shrink: 0;
-  font-style: italic;
-}
+.block-head { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; flex-shrink: 0; }
+.bn { font-size: 32px; font-weight: 900; color: var(--c-gold); line-height: 1; font-family: Georgia, serif; }
+.bname { font-size: 11px; font-weight: 700; color: var(--c-brown); letter-spacing: 0.08em; text-transform: uppercase; }
+.bhint { font-size: 10px; color: var(--c-brown-hint); margin-bottom: 5px; flex-shrink: 0; font-style: italic; }
 
-/* =============================================
-   ЛИНОВАННЫЕ ПОЛЯ
-   ============================================= */
 .lined {
-  flex: 1;
-  border: var(--border-cell);
-  border-radius: 4px;
-  background: var(--c-bg-field);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
+  flex: 1; border: var(--border-cell); border-radius: 4px;
+  background: var(--c-bg-field); overflow: hidden;
+  display: flex; flex-direction: column; min-height: 0;
 }
-
-/* =============================================
-   СТРОКИ
-   ============================================= */
-.row {
-  flex: 1;
-  display: flex;
-  align-items: stretch;
-  border-bottom: var(--border-line);
-  min-height: 0;
-}
+.row { flex: 1; display: flex; align-items: stretch; border-bottom: var(--border-line); min-height: 0; }
 .row:last-child { border-bottom: none; }
-
-/* =============================================
-   НУМЕРАЦИЯ СТРОК
-   ============================================= */
 .ln {
-  width: 18px;
-  min-width: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--c-gold);
-  border-right: var(--border-line);
-  background: var(--c-bg-num);
-  flex-shrink: 0;
-  font-family: monospace;
+  width: 18px; min-width: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--c-gold);
+  border-right: var(--border-line); background: var(--c-bg-num);
+  flex-shrink: 0; font-family: monospace;
 }
 .la { flex: 1; }
 
-/* ЧЕКБОКСЫ — фиксированная ширина 70px, не нужен JS */
 .cba { flex: 1; }
 .cbc {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border-left: var(--border-line);
-  background: var(--c-bg-num);
-  flex-shrink: 0;
-  width: 70px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; border-left: var(--border-line);
+  background: var(--c-bg-num); flex-shrink: 0; width: 46px;
 }
 .cb {
-  width: 14px;
-  height: 14px;
-  border: 0.8px solid var(--c-gold-mid);
-  border-radius: 3px;
+  width: 14px; height: 14px;
+  border: 0.8px solid var(--c-gold-mid); border-radius: 3px;
   background: var(--c-bg-field);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700;
 }
 .cb-ok { color: var(--c-brown); }
 .cb-no { color: var(--c-gold); }
+.cb-confirmed {
+  border: 1.5px solid #c0392b;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px #c0392b;
+}
 
-/* =============================================
-   RICE — блок 7, не трогать
-   ============================================= */
 .rice-head-row {
-  display: flex;
-  padding-left: 18px;
-  margin-bottom: 3px;
-  height: 16px;
-  align-items: center;
-  flex-shrink: 0;
+  display: flex; padding-left: 18px;
+  margin-bottom: 3px; height: 16px; align-items: center; flex-shrink: 0;
 }
 .rice-ch {
-  flex: 1;
-  text-align: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--c-brown);
-  border-right: var(--border-line);
-  line-height: 1;
+  flex: 1; text-align: center; font-size: 10px; font-weight: 700;
+  color: var(--c-brown); border-right: var(--border-line); line-height: 1;
 }
 .rice-ch:last-child { border-right: none; color: var(--c-gold); }
 .rice-cell { flex: 1; border-right: var(--border-line); }
-.rice-cell.total { border-right: none; background: var(--c-bg-num); }
+.rice-cell:last-child { border-right: none; }
+.rice-cell.total { background: var(--c-bg-num); }
 
-/* =============================================
-   ПОДВАЛ
-   ============================================= */
 .footer {
-  border-top: var(--border-main);
-  padding: 6px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--c-bg-footer);
-  flex-shrink: 0;
+  border-top: var(--border-main); padding: 6px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: var(--c-bg-footer); flex-shrink: 0;
 }
 .footer p { font-size: 10px; color: var(--c-brown); }
 .footer a { color: var(--c-brown); font-weight: 700; text-decoration: none; }
 .footer a:hover { text-decoration: underline; }
 
-/* При печати показываем URL ссылки — браузер не печатает href по умолчанию */
 @media print {
   .footer a::after { content: " (" attr(href) ")"; font-weight: 400; }
 }
 
-/* =============================================
-   ПЕЧАТЬ
-   ============================================= */
 @page { size: A4 landscape; margin: 0; }
-
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background: var(--c-bg); overflow: visible; margin: 0; padding: 0; }
+  body { background-color: var(--c-bg) !important; background-image: none !important; overflow: visible; margin: 0; padding: 0; }
+  body::before { display: none !important; }
   .header-buttons { display: none !important; }
-  .example-view { display: none !important; }
+  .stickers-layer { display: none !important; }
+  .example-caption { display: none !important; }
   .rows-wrap { display: flex !important; }
   .card {
-    zoom: 1 !important;
-    visibility: visible !important;
-    width: 297mm !important;
-    height: 210mm !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    page-break-inside: avoid;
-    margin: 0 !important;
+    zoom: 1 !important; visibility: visible !important;
+    width: 297mm !important; height: 210mm !important;
+    box-shadow: none !important; border-radius: 0 !important;
+    page-break-inside: avoid; margin: 0 !important;
   }
 }
-
 </style>
 </head>
 <body>
 
 <div class="card" id="card">
 
-  <!-- ШАПКА с кнопками внутри карточки -->
   <div class="header">
-    <p class="header-title">Монополия гипотез</p>
+    <p class="header-title" id="hdr-title">Монополия гипотез</p>
     <div class="header-buttons">
-      <button class="hbtn active" id="btn-empty" onclick="showEmpty()">Шаблон</button>
-      <button class="hbtn" id="btn-example" onclick="showExample()">Пример</button>
-      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn">Изучить термины</a>
-      <button class="hbtn" onclick="window.print()">Скачать PDF</button>
+      <button class="hbtn active" id="btn-empty"   onclick="showEmpty()">Шаблон</button>
+      <button class="hbtn"        id="btn-example" onclick="showExample()">Пример</button>
+      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn">Изучить термины</a>
+      <button class="hbtn" onclick="printTemplate()" id="btn-pdf">Скачать PDF</button>
+      <button class="hbtn" id="btn-lang" onclick="toggleLang()">EN</button>
     </div>
   </div>
 
-  <!-- ПРИМЕР — скрыт по умолчанию -->
-  <div class="example-view" id="example-view">
-    <img src="example-filled.png" alt="Пример заполнения канваса">
-  </div>
-
-  <!-- РЯДЫ ШАБЛОНА -->
   <div class="rows-wrap" id="rows-wrap">
 
-    <!-- РЯД 1 -->
+    <div class="stickers-layer" id="stickers-layer"></div>
+    <p class="example-caption" id="example-caption">Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)</p>
+
     <div class="grid g4">
-
       <div class="cell">
-        <div class="block-head"><span class="bn">1</span><span class="bname">Факты</span></div>
-        <p class="bhint">Паттерн</p>
+        <div class="block-head"><span class="bn">1</span><span class="bname" id="b1name">Факты</span></div>
+        <p class="bhint" id="b1hint">Паттерн</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -410,10 +352,9 @@ body {
           <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
       </div>
-
       <div class="cell">
-        <div class="block-head"><span class="bn">2</span><span class="bname">Вопрос к паттерну</span></div>
-        <p class="bhint">Почему? Как? Зачем?</p>
+        <div class="block-head"><span class="bn">2</span><span class="bname" id="b2name">Вопрос к паттерну</span></div>
+        <p class="bhint" id="b2hint">Почему? Как? Зачем?</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -422,27 +363,23 @@ body {
           <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
       </div>
-
       <div class="cell span2 nr">
-        <div class="block-head"><span class="bn">3</span><span class="bname">Гипотеза</span></div>
-        <p class="bhint">Паттерн происходит потому, что...</p>
+        <div class="block-head"><span class="bn">3</span><span class="bname" id="b3name">Гипотеза</span></div>
+        <p class="bhint" id="b3hint">Паттерн происходит потому, что...</p>
         <div class="lined">
-          <div class="row"><div class="ln">1</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
-          <div class="row"><div class="ln">2</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
-          <div class="row"><div class="ln">3</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">1</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok" id="chk-3-1">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">2</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok" id="chk-3-2">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">3</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok" id="chk-3-3">✓</div><div class="cb cb-no">✗</div></div></div>
           <div class="row"><div class="ln">4</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
           <div class="row"><div class="ln">5</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
         </div>
       </div>
-
     </div>
 
-    <!-- РЯД 2 -->
     <div class="grid g4 row2">
-
       <div class="cell nb">
-        <div class="block-head"><span class="bn">4</span><span class="bname">Механизм</span></div>
-        <p class="bhint">Это работает так:...</p>
+        <div class="block-head"><span class="bn">4</span><span class="bname" id="b4name">Механизм</span></div>
+        <p class="bhint" id="b4hint">Это работает так:...</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -451,10 +388,9 @@ body {
           <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
       </div>
-
       <div class="cell span3 nr nb">
-        <div class="block-head"><span class="bn">5</span><span class="bname">Инсайт</span></div>
-        <p class="bhint">Что теперь знаем? (после проверки гипотез)</p>
+        <div class="block-head"><span class="bn">5</span><span class="bname" id="b5name">Инсайт</span></div>
+        <p class="bhint" id="b5hint">Что теперь знаем? (после проверки гипотез)</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -463,15 +399,12 @@ body {
           <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
       </div>
-
     </div>
 
-    <!-- РЯД 3: Идея / RICE (блок 7 — эталон, не трогать) -->
     <div class="row3">
-
       <div class="cell-idea">
-        <div class="block-head"><span class="bn">6</span><span class="bname">Идея</span></div>
-        <p class="bhint">Делаем...</p>
+        <div class="block-head"><span class="bn">6</span><span class="bname" id="b6name">Идея</span></div>
+        <p class="bhint" id="b6hint">Делаем...</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -480,14 +413,11 @@ body {
           <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
       </div>
-
       <div class="cell-rice">
         <div class="block-head"><span class="bn">7</span><span class="bname">RICE</span></div>
         <div class="rice-head-row">
-          <div class="rice-ch">R</div>
-          <div class="rice-ch">I</div>
-          <div class="rice-ch">C</div>
-          <div class="rice-ch">E</div>
+          <div class="rice-ch">R</div><div class="rice-ch">I</div>
+          <div class="rice-ch">C</div><div class="rice-ch">E</div>
           <div class="rice-ch">Total</div>
         </div>
         <div class="lined">
@@ -498,58 +428,237 @@ body {
           <div class="row"><div class="ln">5</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
         </div>
       </div>
-
     </div>
 
-  </div><!-- /rows-wrap -->
-
-  <!-- ПОДВАЛ -->
-  <div class="footer">
-    <p>© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" style="color:var(--c-brown);">CC BY-NC-ND 4.0</a></p>
-    <p>Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></p>
   </div>
 
-</div><!-- /card -->
+  <div class="footer">
+    <p>© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></p>
+    <p id="footer-right">Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></p>
+  </div>
+
+</div>
 
 <script>
-var CARD_W = 1100;
-var CARD_H = 778;
+var CARD_W = 1100, CARD_H = 778;
+var currentLang = 'ru', currentMode = 'empty';
 
-// alignCheckboxes не нужен — .cbc имеет фиксированную ширину 70px в CSS.
+var UI = {
+  ru: {
+    title:'Монополия гипотез', btnEmpty:'Шаблон', btnEx:'Пример',
+    btnLearn:'Изучить термины', btnPdf:'Скачать PDF',
+    b1name:'Факты', b1hint:'Паттерн',
+    b2name:'Вопрос к паттерну', b2hint:'Почему? Как? Зачем?',
+    b3name:'Гипотеза', b3hint:'Паттерн происходит потому, что...',
+    b4name:'Механизм', b4hint:'Это работает так:...',
+    b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
+    b6name:'Идея', b6hint:'Делаем...',
+    caption:'Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)',
+    footer:'Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a>'
+  },
+  en: {
+    title:'Hypothesis Canvas', btnEmpty:'Template', btnEx:'Example',
+    btnLearn:'Learn the terms', btnPdf:'Download PDF',
+    b1name:'Facts', b1hint:'The pattern',
+    b2name:'Question about the pattern', b2hint:'Why? How? What for?',
+    b3name:'Hypothesis', b3hint:'The pattern happens because\u2026',
+    b4name:'Mechanism', b4hint:'Here\u2019s how it works:\u2026',
+    b5name:'Insight', b5hint:'What do we know now? (after testing)',
+    b6name:'Idea', b6hint:'We do\u2026',
+    caption:'Example based on David McCullough\u2019s \u201cThe Wright Brothers\u201d (Simon & Schuster, 2015)',
+    footer:'Terminology trainer (example): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a>'
+  }
+};
 
-// scaleCard — вписывает карточку в экран по обоим измерениям.
-// Math.floor до 3 знаков — точнее чем * 0.99, без лишнего запаса.
-function scaleCard() {
-  var scaleX = document.documentElement.clientWidth / CARD_W;
-  var scaleY = document.documentElement.clientHeight / CARD_H;
-  var scale = Math.floor(Math.min(scaleX, scaleY) * 1000) / 1000;
-  var card = document.getElementById('card');
-  if (card) card.style.zoom = scale;
+var STICKERS = {
+  ru: {
+    '1_1':'Лилиенталь — лучший авиатор эпохи, тысячи полётов',
+    '1_2':'Август 1896 — стандартный манёвр, порыв ветра',
+    '1_3':'Погиб при условиях, которые пережил тысячу раз',
+    '2_1':'Почему потерял равновесие при стандартном манёвре?',
+    '2_2':'Как Лилиенталь управлял равновесием в воздухе?',
+    '2_3':'Что именно отказало в момент порыва ветра?',
+    '2_4':'При каких условиях его метод перестаёт работать?',
+    '3_1':'Лилиенталя погубила неспособность сбалансировать машину',
+    '3_2':'Управлял равновесием телом, не конструкцией крыла',
+    '3_3':'При резком порыве тело не успело среагировать',
+    '4_1':'Порыв ветра давит на крыло быстрее, чем пилот смещает тело',
+    '4_2':'Тело — грубый инструмент: реакция запаздывает',
+    '4_3':'Птица скручивает конец крыла → разная подъёмная сила → выравнивание',
+    '5_1':'Задача не «как взлететь», а «как управлять равновесием»',
+    '5_2':'Управление должно быть в конструкции, не в теле пилота',
+    '5_3':'Скручивание крыльев — проверяемый механизм, не догадка',
+    '6_1':'Построить змей со скручиваемыми крыльями за лето',
+    '6_2':'Управлять верёвками с земли — без пилота, без риска',
+    '6_3':'Проверить: даёт ли скручивание управляемый крен',
+    '6_4':'Ехать в Китти-Хок: сильный ветер, мягкие дюны'
+  },
+  en: {
+    '1_1':'Lilienthal \u2014 best aviator of his era, thousands of flights',
+    '1_2':'August 1896 \u2014 routine maneuver, sudden gust of wind',
+    '1_3':'Died in conditions he had survived a thousand times',
+    '2_1':'Why did he lose balance during a standard maneuver?',
+    '2_2':'How did Lilienthal control balance in the air?',
+    '2_3':'What exactly failed at the moment of the gust?',
+    '2_4':'Under what conditions does his method stop working?',
+    '3_1':'Lilienthal was killed by inability to balance the machine',
+    '3_2':'He controlled balance with his body, not the wing structure',
+    '3_3':'When the gust hit, the body couldn\u2019t react in time',
+    '4_1':'A gust pushes the wing faster than the pilot can shift his body',
+    '4_2':'The body is a crude instrument: reaction lags behind',
+    '4_3':'A bird twists its wingtip \u2192 different lift on each side \u2192 leveling',
+    '5_1':'The task isn\u2019t \u201chow to fly\u201d \u2014 it\u2019s \u201chow to control balance\u201d',
+    '5_2':'Control must live in the structure, not the pilot\u2019s body',
+    '5_3':'Wing-warping is a testable mechanism, not a guess',
+    '6_1':'Build a kite with warpable wings over the summer',
+    '6_2':'Control it with ropes from the ground \u2014 no pilot, no risk',
+    '6_3':'Test: does warping produce controllable roll?',
+    '6_4':'Head to Kitty Hawk: strong wind, soft dunes'
+  }
+};
+
+var POSITIONS = {
+  '1_1':{ top: 9, left: 3,  rbk:-3, rfr: 2 },
+  '1_2':{ top: 9, left:14,  rbk: 3, rfr:-2 },
+  '1_3':{ top:22, left: 8,  rbk: 2, rfr:-3 },
+  '2_1':{ top: 9, left:27,  rbk:-2, rfr: 3 },
+  '2_2':{ top: 9, left:38,  rbk: 4, rfr:-2 },
+  '2_3':{ top:22, left:28,  rbk:-3, rfr: 2 },
+  '2_4':{ top:22, left:39,  rbk: 2, rfr:-4 },
+  '3_1':{ top:12, left:56,  rbk:-2, rfr: 3 },
+  '3_2':{ top:16, left:67,  rbk: 3, rfr:-2 },
+  '3_3':{ top:19, left:78,  rbk:-3, rfr: 2 },
+  '4_1':{ top:42, left: 3,  rbk: 2, rfr:-3 },
+  '4_2':{ top:43, left:14,  rbk:-3, rfr: 2 },
+  '4_3':{ top:56, left: 8,  rbk: 3, rfr:-2 },
+  '5_1':{ top:49, left:35,  rbk:-2, rfr: 3 },
+  '5_2':{ top:49, left:49,  rbk: 3, rfr:-3 },
+  '5_3':{ top:49, left:63,  rbk:-2, rfr: 2 },
+  '6_1':{ top:75, left: 3,  rbk: 3, rfr:-2 },
+  '6_2':{ top:80, left:17,  rbk:-3, rfr: 3 },
+  '6_3':{ top:86, left:30,  rbk: 2, rfr:-3 },
+  '6_4':{ top:78, left:44,  rbk:-2, rfr: 2 }
+};
+
+function buildSticker(key, text) {
+  var pos = POSITIONS[key]; if (!pos) return null;
+  var el = document.createElement('div'); el.className = 'sticker';
+  el.style.top = pos.top + '%'; el.style.left = pos.left + '%';
+  var back = document.createElement('div'); back.className = 'sticker-back';
+  back.style.transform = 'rotate('+pos.rbk+'deg)';
+  var front = document.createElement('div'); front.className = 'sticker-front';
+  front.style.transform = 'rotate('+pos.rfr+'deg)';
+  var pin = document.createElement('div'); pin.className = 'sticker-pin';
+  var p = document.createElement('p'); p.textContent = text;
+  var corner = document.createElement('div'); corner.className = 'sticker-corner';
+  front.appendChild(pin); front.appendChild(p); front.appendChild(corner);
+  el.appendChild(back); el.appendChild(front); return el;
 }
 
+/* =============================================
+   CONFIRMED — какие чекбоксы обводим кружком в примере.
+   Формат: id атрибута элемента cb-ok.
+   Меняй здесь — не в HTML.
+   ============================================= */
+var CONFIRMED = ['chk-3-1', 'chk-3-2', 'chk-3-3'];
+
+function setConfirmed(active) {
+  CONFIRMED.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (active) { el.classList.add('cb-confirmed'); }
+    else        { el.classList.remove('cb-confirmed'); }
+  });
+}
+
+/* renderStickers вызывается ОДИН РАЗ при загрузке.
+   При смене языка только обновляем текст в уже созданных стикерах. */
+function renderStickers() {
+  var layer = document.getElementById('stickers-layer');
+  layer.innerHTML = '';
+  Object.keys(POSITIONS).forEach(function(k) {
+    var s = buildSticker(k, STICKERS.ru[k]);
+    if (s) { s.setAttribute('data-key', k); layer.appendChild(s); }
+  });
+}
+
+function updateStickerTexts(lang) {
+  var data = STICKERS[lang] || STICKERS.ru;
+  var layer = document.getElementById('stickers-layer');
+  layer.querySelectorAll('.sticker').forEach(function(el) {
+    var k = el.getAttribute('data-key');
+    if (k && data[k]) el.querySelector('p').textContent = data[k];
+  });
+}
+
+function applyLang(lang) {
+  var u = UI[lang];
+  document.getElementById('hdr-title').textContent   = u.title;
+  document.getElementById('btn-empty').textContent   = u.btnEmpty;
+  document.getElementById('btn-example').textContent = u.btnEx;
+  document.getElementById('btn-learn').textContent   = u.btnLearn;
+  document.getElementById('btn-pdf').textContent     = u.btnPdf;
+  document.getElementById('btn-lang').textContent    = lang==='ru'?'EN':'RU';
+  ['1','2','3','4','5','6'].forEach(function(n){
+    document.getElementById('b'+n+'name').textContent = u['b'+n+'name'];
+    document.getElementById('b'+n+'hint').textContent = u['b'+n+'hint'];
+  });
+  document.getElementById('example-caption').textContent = u.caption;
+  document.getElementById('footer-right').innerHTML = u.footer;
+  updateStickerTexts(lang);
+}
+
+function toggleLang() { currentLang = currentLang==='ru'?'en':'ru'; applyLang(currentLang); }
+
 function showEmpty() {
-  document.getElementById('rows-wrap').style.display = 'flex';
-  document.getElementById('example-view').style.display = 'none';
+  currentMode = 'empty';
+  setConfirmed(false);
+  document.getElementById('stickers-layer').classList.remove('visible');
+  document.getElementById('example-caption').classList.remove('visible');
   document.getElementById('btn-empty').classList.add('active');
   document.getElementById('btn-example').classList.remove('active');
 }
 
 function showExample() {
-  document.getElementById('rows-wrap').style.display = 'none';
-  document.getElementById('example-view').style.display = 'flex';
+  currentMode = 'example';
+  setConfirmed(true);
+  updateStickerTexts(currentLang);
+  document.getElementById('stickers-layer').classList.add('visible');
+  document.getElementById('example-caption').classList.add('visible');
   document.getElementById('btn-empty').classList.remove('active');
   document.getElementById('btn-example').classList.add('active');
 }
 
-var resizeTimer;
-window.addEventListener('resize', function() {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(scaleCard, 150);
-});
+/* printTemplate — всегда печатает чистый шаблон,
+   независимо от текущего режима экрана. */
+function printTemplate() {
+  var wasExample = currentMode === 'example';
+  if (wasExample) {
+    setConfirmed(false);
+    document.getElementById('stickers-layer').classList.remove('visible');
+    document.getElementById('example-caption').classList.remove('visible');
+  }
+  window.print();
+  if (wasExample) {
+    setConfirmed(true);
+    document.getElementById('stickers-layer').classList.add('visible');
+    document.getElementById('example-caption').classList.add('visible');
+  }
+}
 
-window.addEventListener('load', function() {
+function scaleCard() {
+  var sx = document.documentElement.clientWidth / CARD_W;
+  var sy = document.documentElement.clientHeight / CARD_H;
+  var s = Math.floor(Math.min(sx,sy)*1000)/1000;
+  var c = document.getElementById('card'); if(c) c.style.zoom = s;
+}
+
+var rt;
+window.addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(scaleCard,150); });
+window.addEventListener('load', function(){
   scaleCard();
-  document.getElementById('card').style.visibility = 'visible';
+  renderStickers();
+  document.getElementById('card').style.visibility='visible';
 });
 </script>
 
