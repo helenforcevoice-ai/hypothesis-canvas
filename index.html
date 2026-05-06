@@ -22,7 +22,7 @@
 <!-- Mobile hint -->
 <style>
 @media (max-width: 768px) {
-  .mobile-hint {
+  .mobile-hint:not(.hidden) {
     display: flex !important;
   }
 }
@@ -379,7 +379,7 @@ body::before {
 <!-- Мобильная подсказка -->
 <div class="mobile-hint" id="mobile-hint">
   <p>📋 Для работы с канвасом нужен экран побольше<br>Сохраните ссылку и откройте на компьютере</p>
-  <button onclick="document.getElementById('mobile-hint').style.display='none'">Всё равно открыть</button>
+  <button onclick="document.getElementById('mobile-hint').classList.add('hidden')">Всё равно открыть</button>
 </div>
 
 <div class="card" id="card">
