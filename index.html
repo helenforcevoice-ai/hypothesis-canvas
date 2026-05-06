@@ -389,7 +389,7 @@ body::before {
     <div class="header-buttons">
       <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
       <button class="hbtn"        id="btn-example" onclick="showExample();trackEvent('example')">Пример</button>
-      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn" onclick="trackEvent('learn_terms')">Изучить термины</a>
+      <a href="https://t.me/wright_test_bot?start=canvas_button" target="_blank" class="hbtn" id="btn-learn" onclick="trackEvent('learn_terms')">Изучить термины</a>
       <button class="hbtn" onclick="printTemplate();trackEvent('download_pdf')" id="btn-pdf">Скачать PDF</button>
       <button class="hbtn" id="btn-lang" onclick="toggleLang();trackEvent('lang_'+currentLang)">EN</button>
     </div>
@@ -514,7 +514,7 @@ var UI = {
     b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
     b6name:'Идея', b6hint:'Делаем...',
     caption:'Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)',
-    footer:'Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a>',
+    footer:'Тренажёр терминологии: <a href="https://t.me/wright_test_bot?start=canvas_footer" target="_blank">«Крылья братьев Райт»</a>',
     footerLeft:'\u00a9 Елена Безгласная, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 По вопросам коммерческого использования: <a href="https://t.me/bezshuma_channel" target="_blank" class="no-print-href">t.me/bezshuma_channel</a>'
   },
   en: {
@@ -527,7 +527,7 @@ var UI = {
     b5name:'Insight', b5hint:'What do we know now? (after testing)',
     b6name:'Idea', b6hint:'We do\u2026',
     caption:'Example based on David McCullough\u2019s \u201cThe Wright Brothers\u201d (Simon & Schuster, 2015)',
-    footer:'Terminology quiz: <a href="https://t.me/wright_test_bot" target="_blank">\u201cThe Wright Brothers\u201d</a>',
+    footer:'Terminology quiz: <a href="https://t.me/wright_test_bot?start=canvas_footer" target="_blank">\u201cThe Wright Brothers\u201d</a>',
     footerLeft:'\u00a9 Elena Bezglasnaia, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Commercial use inquiries: <a href="https://t.me/bezshuma_channel" target="_blank" class="no-print-href">t.me/bezshuma_channel</a>'
   }
 };
@@ -722,7 +722,8 @@ window.addEventListener('load', function(){
   scaleCard();
   renderStickers();
   document.getElementById('card').style.visibility='visible';
-  trackEvent('page_open');
+  var _ref = new URLSearchParams(window.location.search).get('ref') || '';
+  trackEvent('page_open', _ref);
 });
 
 /* =============================================
@@ -730,7 +731,7 @@ window.addEventListener('load', function(){
    ============================================= */
 var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
 
-function trackEvent(eventName) {
+function trackEvent(eventName, details) {
   try {
     var device = window.innerWidth <= 768 ? 'mobile' : 'desktop';
     var payload = {
@@ -738,7 +739,7 @@ function trackEvent(eventName) {
       event: eventName,
       lang: currentLang,
       device: device,
-      details: ''
+      details: details || ''
     };
     fetch(ANALYTICS_URL, {
       method: 'POST',
