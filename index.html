@@ -4,6 +4,59 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Монополия гипотез — Канвас</title>
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Монополия гипотез — Канвас">
+<meta property="og:description" content="Инструмент для формулировки бизнес-гипотез. Факты → Вопрос → Гипотеза → Механизм → Инсайт → Идея. Дополнение к Test Card Остервальдера.">
+<meta property="og:url" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pic.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Монополия гипотез — Канвас">
+<meta name="twitter:description" content="Инструмент для формулировки бизнес-гипотез. Дополнение к Test Card Остервальдера.">
+<meta name="twitter:image" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pic.png">
+
+<!-- Mobile hint -->
+<style>
+@media (max-width: 768px) {
+  .mobile-hint {
+    display: flex !important;
+  }
+}
+.mobile-hint {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44,26,14,0.92);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  text-align: center;
+}
+.mobile-hint p {
+  color: #F5F0E4;
+  font-family: 'PT Sans', Georgia, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.mobile-hint button {
+  background: #B8933A;
+  color: #F5F0E4;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-family: 'PT Sans', Georgia, sans-serif;
+  cursor: pointer;
+}
+</style>
+
 <style>
 
 :root {
@@ -300,6 +353,7 @@ body::before {
 
 @media print {
   .footer a::after { content: " (" attr(href) ")"; font-weight: 400; }
+  .no-print-href::after { content: none !important; }
 }
 
 @page { size: A4 landscape; margin: 0; }
@@ -321,6 +375,12 @@ body::before {
 </style>
 </head>
 <body>
+
+<!-- Мобильная подсказка -->
+<div class="mobile-hint" id="mobile-hint">
+  <p>📋 Для работы с канвасом нужен экран побольше<br>Сохраните ссылку и откройте на компьютере</p>
+  <button onclick="document.getElementById('mobile-hint').style.display='none'">Всё равно открыть</button>
+</div>
 
 <div class="card" id="card">
 
@@ -433,8 +493,8 @@ body::before {
   </div>
 
   <div class="footer">
-    <p>© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></p>
-    <p id="footer-right">Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a></p>
+    <p>© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> · По вопросам коммерческого использования: <a href="https://t.me/bezshuma_channel" target="_blank">t.me/bezshuma_channel</a></p>
+    <p id="footer-right">Тренажёр на закрепление понятий: <a href="https://t.me/wright_test_bot" target="_blank">Тренажёр «Крылья братьев Райт»</a></p>
   </div>
 
 </div>
@@ -454,7 +514,7 @@ var UI = {
     b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
     b6name:'Идея', b6hint:'Делаем...',
     caption:'Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)',
-    footer:'Тренажёр на закрепление понятий (пример): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a>'
+    footer:'Тренажёр на закрепление понятий: <a href="https://t.me/wright_test_bot" target="_blank">Тренажёр «Крылья братьев Райт»</a>'
   },
   en: {
     title:'Hypothesis Canvas', btnEmpty:'Template', btnEx:'Example',
@@ -466,7 +526,7 @@ var UI = {
     b5name:'Insight', b5hint:'What do we know now? (after testing)',
     b6name:'Idea', b6hint:'We do\u2026',
     caption:'Example based on David McCullough\u2019s \u201cThe Wright Brothers\u201d (Simon & Schuster, 2015)',
-    footer:'Terminology trainer (example): <a href="https://t.me/wright_test_bot" target="_blank">t.me/wright_test_bot</a>'
+    footer:'Terminology trainer: <a href="https://t.me/wright_test_bot" target="_blank">Trainer \u201cThe Wright Brothers\u201d</a>'
   }
 };
 
