@@ -387,11 +387,11 @@ body::before {
   <div class="header">
     <p class="header-title" id="hdr-title">Монополия гипотез</p>
     <div class="header-buttons">
-      <button class="hbtn active" id="btn-empty"   onclick="showEmpty()">Шаблон</button>
-      <button class="hbtn"        id="btn-example" onclick="showExample()">Пример</button>
-      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn">Изучить термины</a>
-      <button class="hbtn" onclick="printTemplate()" id="btn-pdf">Скачать PDF</button>
-      <button class="hbtn" id="btn-lang" onclick="toggleLang()">EN</button>
+      <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
+      <button class="hbtn"        id="btn-example" onclick="showExample();trackEvent('example')">Пример</button>
+      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn" onclick="trackEvent('learn_terms')">Изучить термины</a>
+      <button class="hbtn" onclick="printTemplate();trackEvent('download_pdf')" id="btn-pdf">Скачать PDF</button>
+      <button class="hbtn" id="btn-lang" onclick="toggleLang();trackEvent('lang_'+currentLang)">EN</button>
     </div>
   </div>
 
@@ -722,7 +722,32 @@ window.addEventListener('load', function(){
   scaleCard();
   renderStickers();
   document.getElementById('card').style.visibility='visible';
+  trackEvent('page_open');
 });
+
+/* =============================================
+   АНАЛИТИКА — отправка событий в Google Sheets
+   ============================================= */
+var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
+
+function trackEvent(eventName) {
+  try {
+    var device = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+    var payload = {
+      timestamp: new Date().toISOString(),
+      event: eventName,
+      lang: currentLang,
+      device: device,
+      details: ''
+    };
+    fetch(ANALYTICS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch(e) {}
+}
 </script>
 
 </body>
