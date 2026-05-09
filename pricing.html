@@ -8,7 +8,7 @@
 <!-- Favicon — inline SVG, без отдельного файла -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232C1A0E'/><text y='.85em' x='.1em' font-size='80' fill='%23B8933A'>М</text></svg>">
 
-<!-- Open Graph — превью при расшаривании в Telegram, соцсетях -->
+<!-- Open Graph -->
 <meta property="og:title" content="Монополия гипотез — Форматы работы">
 <meta property="og:description" content="Канвас и тренажёр для работы с бизнес-гипотезами. Три формата: самостоятельно, мастеркласс, разбор кейса.">
 <meta property="og:url" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pricing">
@@ -19,7 +19,7 @@
 <meta name="twitter:description" content="Канвас и тренажёр для работы с бизнес-гипотезами.">
 <meta name="twitter:image" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pic.png">
 
-<!-- PT Sans: preconnect + font-display swap для быстрой загрузки -->
+<!-- PT Sans -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
@@ -41,14 +41,9 @@
   --shadow:       0 2px 16px rgba(44,26,14,0.08);
 }
 
-/* ─── СБРОС И БАЗОВЫЕ СТИЛИ ──────────────────────────────── */
+/* ─── СБРОС ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
-
+html { scroll-behavior: smooth; }
 body {
   font-family: 'PT Sans', Georgia, serif;
   background: var(--c-bg);
@@ -57,19 +52,19 @@ body {
   min-height: 100vh;
 }
 
-/* ─── КОНТЕЙНЕР ──────────────────────────────────────────── */
+/* ─── КОНТЕЙНЕР (расширен до 1100px) ─────────────────────── */
 .wrap {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 20px 16px 48px;
 }
 
-/* ─── HERO ───────────────────────────────────────────────── */
+/* ─── HERO (увеличен до 290px) ───────────────────────────── */
 .hero {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  min-height: 220px;
+  min-height: 290px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -77,7 +72,6 @@ body {
   margin-bottom: 1.5rem;
   background: var(--c-dark);
 }
-
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -86,39 +80,72 @@ body {
   background-position: top center;
   z-index: 0;
 }
-
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(44,26,14,0.35) 0%,
-    rgba(44,26,14,0.88) 100%
-  );
+  background: linear-gradient(to bottom, rgba(44,26,14,0.35) 0%, rgba(44,26,14,0.88) 100%);
   z-index: 1;
 }
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-}
-
+.hero-content { position: relative; z-index: 2; }
 .hero h1 {
-  font-size: clamp(22px, 4vw, 30px);
+  font-size: clamp(24px, 4vw, 34px);
   font-weight: 700;
   color: var(--c-bg);
   margin-bottom: 6px;
   letter-spacing: 0.01em;
 }
-
 .hero p {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--c-gold-light);
   margin-bottom: 1.5rem;
 }
 
+/* ─── КНОПКИ — три уровня ────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+  border: 1.5px solid var(--c-gold);
+  white-space: nowrap;
+}
+/* Primary — золотая заливка */
+.btn--primary {
+  background: var(--c-gold);
+  color: var(--c-dark);
+  border-color: var(--c-gold);
+}
+.btn--primary:hover { background: var(--c-gold-mid); border-color: var(--c-gold-mid); }
+
+/* Secondary — контур */
+.btn--secondary {
+  background: transparent;
+  color: var(--c-text);
+  border-color: var(--c-gold);
+}
+.btn--secondary:hover { background: rgba(184,147,58,0.08); }
+
+/* Secondary на тёмном фоне */
+.card--dark .btn--secondary {
+  color: var(--c-gold);
+}
+.card--dark .btn--secondary:hover { background: rgba(184,147,58,0.12); }
+.cta-card--dark .btn--secondary {
+  color: var(--c-gold);
+}
+
+/* Hero кнопка */
 .hero-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   background: transparent;
   border: 1px solid var(--c-gold);
   color: var(--c-gold);
@@ -127,15 +154,17 @@ body {
   font-size: 14px;
   font-family: inherit;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s;
 }
-.hero-btn:hover {
-  background: rgba(184,147,58,0.15);
-}
+.hero-btn:hover { background: rgba(184,147,58,0.15); }
+
+/* Focus */
+.btn:focus-visible,
 .hero-btn:focus-visible {
   outline: 2px solid var(--c-gold);
   outline-offset: 2px;
 }
+.btn:active { opacity: 0.85; }
 
 /* ─── БЛОК КОНТЕКСТА ─────────────────────────────────────── */
 .context {
@@ -148,18 +177,152 @@ body {
   line-height: 1.75;
   box-shadow: var(--shadow);
 }
+.context strong { color: var(--c-brown); }
 
-.context strong {
-  color: var(--c-brown);
+/* ─── БЛОК ИНСТРУМЕНТОВ ──────────────────────────────────── */
+.tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.tool-card {
+  background: var(--c-bg-card);
+  border: 1px solid #E8E0CC;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+.tool-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tool-icon {
+  width: 36px; height: 36px;
+  background: var(--c-dark);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tool-icon svg {
+  width: 18px; height: 18px;
+  fill: none;
+  stroke: var(--c-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tool-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text);
+}
+.tool-caption {
+  font-size: 12px;
+  color: var(--c-brown-hint);
+  line-height: 1.5;
 }
 
-/* ─── КАРТОЧКИ ───────────────────────────────────────────── */
+/* ─── ПРЕВЬЮ КАНВАСА ─────────────────────────────────────── */
+.tool-preview-img {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #E8E0CC;
+  flex: 1;
+  min-height: 0;
+}
+.tool-preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+  transition: opacity 0.2s;
+}
+.tool-preview-img:hover img { opacity: 0.88; }
+
+/* ─── ЦИТАТА В БЛОКЕ КАНАЛА ──────────────────────────────── */
+.cta-quote {
+  border-left: 3px solid var(--c-gold);
+  padding-left: 12px;
+  font-size: 13px;
+  color: var(--c-brown);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* ─── КНОПКИ ИНСТРУМЕНТОВ — на всю ширину, в ряд ────────── */
+.tool-btns {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+.tool-btns .btn {
+  flex: 1;
+  font-size: 13px;
+}
+
+/* ─── РАЗВЁРТКА ВОПРОСА — с левой границей ───────────────── */
+.trainer-expanded {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+.trainer-expanded.open {
+  display: flex;
+  border-left: 3px solid var(--c-gold);
+  padding-left: 12px;
+  margin-top: 4px;
+}
+.trainer-q {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--c-text);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.trainer-options {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.trainer-options li {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--c-brown);
+  border: 1px solid #E8E0CC;
+  background: var(--c-bg);
+  line-height: 1.5;
+}
+.trainer-options li.correct {
+  background: rgba(184,147,58,0.10);
+  border-color: var(--c-gold);
+  color: var(--c-text);
+  font-weight: 700;
+}
+.trainer-options li.correct::before {
+  content: '✓ ';
+  color: var(--c-gold);
+}
+
+/* ─── КАРТОЧКИ ТАРИФОВ ───────────────────────────────────── */
 .cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 1.5rem;
-  align-items: stretch; /* все карточки одной высоты */
+  /* Отступ сверху — чтобы абсолютный бейдж «Рекомендуем» не обрезался */
+  padding-top: 18px;
+  align-items: stretch;
 }
 
 .card {
@@ -171,7 +334,9 @@ body {
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow);
+  transition: transform 0.2s;
 }
+.card:hover { transform: translateY(-2px); }
 
 /* Тёмная карточка — Инженер */
 .card--dark {
@@ -180,22 +345,48 @@ body {
   border-width: 1.5px;
 }
 
+/* ─── БЕЙДЖ — position absolute, по центру сверху ────────── */
+.card-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--c-gold);
+  color: var(--c-dark);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .card-name {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--c-text);
-  margin-bottom: 0;
+  margin-bottom: 2px;
 }
 .card--dark .card-name { color: var(--c-bg); }
 
 .card-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--c-brown-hint);
-  margin-top: 3px;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
   line-height: 1.4;
 }
 .card--dark .card-sub { color: var(--c-gold-mid); }
+
+/* ─── ЦЕНА ───────────────────────────────────────────────── */
+.card-price {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--c-gold);
+  margin-bottom: 14px;
+  line-height: 1.1;
+}
+.card--dark .card-price { color: var(--c-gold-mid); }
 
 .card-divider {
   border: none;
@@ -209,11 +400,10 @@ body {
   list-style: none;
   flex: 1;
 }
-
 .features li {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--c-text);
-  padding: 3px 0;
+  padding: 4px 0;
   display: flex;
   gap: 8px;
   line-height: 1.5;
@@ -224,51 +414,39 @@ body {
   color: var(--c-gold);
   flex-shrink: 0;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14px;
   margin-top: 1px;
 }
 .card--dark .features .check { color: var(--c-gold-mid); }
 
-/* Разделитель между блоками внутри карточки — тонкая линия */
+/* Разделитель внутри списка */
 .features-sep {
   border: none;
   border-top: 1px solid #E8E0CC;
   margin: 8px 0;
 }
-.card--dark .features-sep {
-  border-color: rgba(184,147,58,0.2);
-}
+.card--dark .features-sep { border-color: rgba(184,147,58,0.2); }
 
-/* ─── ШАПКА КАРТОЧКИ (название + бейдж в ряд) ───────────── */
-.card-header {
+/* ─── КНОПКИ В КАРТОЧКЕ ──────────────────────────────────── */
+.card-btns {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+.card-btns .btn {
+  width: 100%;
+  font-size: 14px;
 }
 
-/* ─── БЕЙДЖ (Бесплатно / Рекомендуем) ───────────────────── */
-.card-badge {
-  background: var(--c-gold);
-  color: var(--c-bg);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.03em;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* ─── БЛОК КОНТАКТОВ — две карточки ─────────────────────── */
+/* ─── CTA БЛОК ───────────────────────────────────────────── */
 .cta {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-bottom: 1.5rem;
 }
-
 .cta-card {
   background: var(--c-bg-card);
   border: 1px solid #E8E0CC;
@@ -277,14 +455,12 @@ body {
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
-
 .cta-card--dark {
   background: var(--c-dark);
   border-color: var(--c-gold);
 }
-
 .cta-card-label {
   font-size: 11px;
   font-weight: 700;
@@ -297,10 +473,21 @@ body {
 .cta-card-text {
   font-size: 14px;
   color: var(--c-brown);
-  line-height: 1.6;
+  line-height: 1.65;
   flex: 1;
 }
 .cta-card--dark .cta-card-text { color: var(--c-gold-light); }
+
+/* Предупреждение о подтверждении */
+.cta-card-note {
+  font-size: 12px;
+  color: var(--c-gold-mid);
+  line-height: 1.55;
+  padding: 8px 10px;
+  border: 1px solid rgba(184,147,58,0.3);
+  border-radius: var(--radius-md);
+  background: rgba(184,147,58,0.06);
+}
 
 .cta-card-link {
   display: inline-block;
@@ -314,55 +501,6 @@ body {
   transition: opacity 0.2s;
 }
 .cta-card-link:hover { opacity: 0.75; }
-.cta-card-link:focus-visible {
-  outline: 2px solid var(--c-gold);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-@media (max-width: 640px) {
-  .cta {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ─── КНОПКИ ВНУТРИ КАРТОЧКИ ─────────────────────────────── */
-.card-btns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: auto; /* прибиваем к низу карточки */
-  padding-top: 14px;
-}
-
-.card-btns .btn {
-  font-size: 12px;
-  padding: 7px 14px;
-  flex: 1;
-  text-align: center;
-}
-
-/* ─── КНОПКИ ─────────────────────────────────────────────── */
-.btn {
-  display: inline-block;
-  background: transparent;
-  border: 1px solid var(--c-gold);
-  color: var(--c-text);
-  padding: 9px 18px;
-  border-radius: var(--radius-md);
-  font-size: 13px;
-  font-family: inherit;
-  text-decoration: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
-}
-.btn:hover { background: #F0EAD8; }
-.btn:active { background: #E8DFC8; }
-.btn:focus-visible {
-  outline: 2px solid var(--c-gold);
-  outline-offset: 2px;
-}
 
 /* ─── ПОДВАЛ ─────────────────────────────────────────────── */
 .footer {
@@ -372,7 +510,6 @@ body {
   line-height: 2;
   padding-top: 8px;
 }
-
 .footer a {
   color: var(--c-gold);
   text-decoration: none;
@@ -380,7 +517,6 @@ body {
 }
 .footer a:hover { opacity: 0.75; }
 
-/* ─── КНОПКА НАВЕРХ ──────────────────────────────────────── */
 .back-top {
   display: block;
   margin: 1rem auto 0;
@@ -395,321 +531,20 @@ body {
 }
 .back-top:hover { color: var(--c-gold); }
 
-/* ─── АДАПТИВ — МОБИЛЬНЫЙ ────────────────────────────────── */
+/* ─── АДАПТИВ ────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .hero {
-    min-height: 180px;
-    padding: 1.75rem 1.25rem 1.5rem;
-  }
-
-  /* Карточки — в одну колонку */
-  .cards {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  /* На мобильном Инженер идёт последним — порядок лестницы сохраняется */
-  .card-btns {
-    flex-direction: column;
-  }
-
-  .card-btns .btn {
-    width: 100%;
-  }
+  .hero { min-height: 220px; padding: 1.75rem 1.25rem 1.5rem; }
+  .cards { grid-template-columns: 1fr; gap: 24px; }
+  .tools { grid-template-columns: 1fr; }
+  .cta { grid-template-columns: 1fr; }
+  .tool-btns { flex-direction: column; }
+}
+@media (min-width: 641px) and (max-width: 900px) {
+  .cards { grid-template-columns: 1fr 1fr; }
+  .card:last-child { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
 }
 
-/* ─── ПЛАНШЕТ ────────────────────────────────────────────── */
-@media (min-width: 641px) and (max-width: 768px) {
-  .cards {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  /* Инженер занимает всю ширину на планшете */
-  .card:last-child {
-    grid-column: 1 / -1;
-    max-width: 50%;
-    margin: 0 auto;
-  }
-}
-
-/* ─── БЛОК ИНСТРУМЕНТОВ ──────────────────────────────────── */
-.tools {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-
-.tool-card {
-  background: var(--c-bg-card);
-  border: 1px solid #E8E0CC;
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: var(--shadow);
-}
-
-.tool-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.tool-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--c-dark);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.tool-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: var(--c-gold);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.tool-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--c-text);
-}
-
-.tool-preview {
-  flex: 1;
-  font-size: 12px;
-  color: var(--c-brown);
-  line-height: 1.5;
-}
-
-/* Превью тренажёра */
-.trainer-preview {
-  background: var(--c-bg);
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.trainer-q {
-  font-weight: 700;
-  color: var(--c-text);
-  margin-bottom: 8px;
-  font-size: 12px;
-}
-
-.trainer-options {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.trainer-options li {
-  padding: 5px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  color: var(--c-brown);
-  border: 1px solid #E8E0CC;
-  background: white;
-  line-height: 1.4;
-}
-
-.trainer-options li.correct {
-  background: rgba(184,147,58,0.12);
-  border-color: var(--c-gold);
-  color: var(--c-text);
-  font-weight: 700;
-}
-
-.trainer-options li.correct::before {
-  content: '✓ ';
-  color: var(--c-gold);
-}
-
-/* Превью канваса */
-.canvas-preview {
-  background: var(--c-bg);
-  border-radius: 8px;
-  padding: 8px;
-  cursor: zoom-in;
-}
-
-.canvas-mini {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto auto;
-  gap: 4px;
-  font-size: 9px;
-}
-
-.canvas-mini-block {
-  background: white;
-  border: 1px solid #E8E0CC;
-  border-radius: 4px;
-  padding: 4px 5px;
-  min-height: 52px;
-}
-
-.canvas-mini-block.span2 {
-  grid-column: span 2;
-}
-
-.canvas-mini-block.span4 {
-  grid-column: span 4;
-}
-
-.canvas-mini-label {
-  font-size: 8px;
-  font-weight: 700;
-  color: var(--c-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 3px;
-  display: block;
-}
-
-.canvas-mini-text {
-  font-size: 8px;
-  color: var(--c-brown);
-  line-height: 1.4;
-}
-
-.canvas-mini-hyp {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.canvas-mini-hyp-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 3px;
-  font-size: 8px;
-  color: var(--c-brown);
-  line-height: 1.3;
-}
-
-.hyp-badge {
-  font-size: 8px;
-  font-weight: 700;
-  flex-shrink: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1px;
-}
-
-.hyp-badge.ok {
-  background: rgba(184,147,58,0.15);
-  color: var(--c-gold);
-  border: 1px solid var(--c-gold);
-}
-
-.hyp-badge.no {
-  background: rgba(180,50,50,0.1);
-  color: #C0392B;
-  border: 1px solid #C0392B;
-}
-
-.tool-caption {
-  font-size: 11px;
-  color: var(--c-brown-hint);
-  line-height: 1.5;
-}
-
-.tool-caption a {
-  color: var(--c-gold);
-  text-decoration: none;
-  border-bottom: 1px solid rgba(184,147,58,0.4);
-}
-
-/* Развёрнутый вопрос тренажёра */
-.trainer-expanded {
-  display: none;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.trainer-expanded.open {
-  display: flex;
-}
-
-.trainer-expanded .trainer-preview {
-  background: transparent;
-  padding: 0;
-}
-
-/* Лайтбокс для канваса */
-.lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(44,26,14,0.92);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  cursor: zoom-out;
-}
-
-.lightbox.open {
-  display: flex;
-}
-
-.lightbox-inner {
-  background: white;
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  max-width: 860px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  cursor: default;
-}
-
-.lightbox-close {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 12px;
-}
-
-.lightbox-close button {
-  background: transparent;
-  border: 1px solid #E8E0CC;
-  color: var(--c-brown-hint);
-  padding: 4px 12px;
-  border-radius: var(--radius-md);
-  font-size: 12px;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-
-@media (max-width: 640px) {
-  .tools {
-    grid-template-columns: 1fr;
-  }
-  .canvas-full {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .canvas-block.span4 { grid-column: span 2; }
-}
-
-/* ─── ПЕЧАТЬ — скрываем лишнее ───────────────────────────── */
+/* ─── ПЕЧАТЬ ─────────────────────────────────────────────── */
 @media print {
   .hero-btn, .cta, .back-top, .footer { display: none; }
   .hero { min-height: auto; }
@@ -761,20 +596,21 @@ body {
       </div>
       <p class="tool-caption">Маккаллоу Д. «Братья Райт». — М.: Альпина, 2017</p>
 
-      <!-- Развёртка — вопрос из тренажёра -->
+      <!-- Развёртка вопроса — с левой границей -->
       <div class="trainer-expanded" id="trainer-expanded">
-        <div class="trainer-preview">
-          <p class="trainer-q">«Лилиенталя погубила его неспособность правильно сбалансировать машину в воздухе» — это:</p>
-          <ul class="trainer-options">
-            <li><strong>Наблюдение</strong> — братья изучили описания и фотографии крушения планера</li>
-            <li><strong>Знание</strong> — установленная и подтверждённая техническая причина катастрофы</li>
-            <li><strong>Прогноз</strong> — предсказание, что без эффективного управления полёты обречены</li>
-            <li class="correct"><strong>Гипотеза</strong> — правдоподобное предположение о причине гибели на основе прочитанных материалов, не проверенное братьями опытным путём</li>
-          </ul>
-        </div>
+        <p class="trainer-q">«Лилиенталя погубила его неспособность правильно сбалансировать машину в воздухе» — это:</p>
+        <ul class="trainer-options">
+          <li><strong>Наблюдение</strong> — братья изучили описания и фотографии крушения планера</li>
+          <li><strong>Знание</strong> — установленная и подтверждённая техническая причина катастрофы</li>
+          <li><strong>Прогноз</strong> — предсказание, что без эффективного управления полёты обречены</li>
+          <li class="correct"><strong>Гипотеза</strong> — правдоподобное предположение о причине гибели на основе прочитанных материалов, не проверенное братьями опытным путём</li>
+        </ul>
       </div>
 
-      <button class="btn" id="trainer-btn" onclick="toggleTrainer()" style="align-self:flex-start; font-size:12px; padding:7px 14px;">Посмотреть вопрос</button>
+      <div class="tool-btns">
+        <button class="btn btn--secondary" id="trainer-btn" onclick="toggleTrainer()">Посмотреть вопрос</button>
+        <a href="https://t.me/wright_test_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть тренажёр</a>
+      </div>
     </div>
 
     <!-- Канвас -->
@@ -791,20 +627,25 @@ body {
         <p class="tool-title">Канвас «Монополия гипотез»</p>
       </div>
       <p class="tool-caption">Кейс составлен по материалам ФРИИ</p>
-      <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn" style="align-self:flex-start; font-size:12px; padding:7px 14px;">Посмотреть пример</a>
+      <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="tool-preview-img">
+        <img src="examplefilled.png" alt="Пример заполненного канваса">
+      </a>
+      <div class="tool-btns">
+        <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Посмотреть пример</a>
+        <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть канвас</a>
+      </div>
     </div>
 
   </div><!-- /tools -->
 
+  <!-- ─── КАРТОЧКИ ТАРИФОВ ─────────────────────────────────── -->
   <div class="cards" id="pricing">
 
     <!-- Наблюдатель -->
     <article class="card">
-      <div class="card-header">
-        <p class="card-name">Наблюдатель</p>
-        <span class="card-badge">Бесплатно</span>
-      </div>
+      <p class="card-name">Наблюдатель</p>
       <p class="card-sub">Освоить метод самостоятельно</p>
+      <div class="card-price">Бесплатно</div>
       <hr class="card-divider">
       <ul class="features">
         <li><span class="check">✓</span><span>Тренажёр в Telegram</span></li>
@@ -814,22 +655,19 @@ body {
       </ul>
       <div class="card-btns">
         <a href="https://t.me/wright_test_bot"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn">Открыть тренажёр</a>
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn--primary">Открыть тренажёр</a>
         <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn">Скачать канвас PDF</a>
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn--secondary">Скачать канвас PDF</a>
       </div>
     </article>
 
     <!-- Аналитик -->
     <article class="card">
-      <div class="card-header">
-        <p class="card-name">Аналитик</p>
-      </div>
+      <p class="card-name">Аналитик</p>
       <p class="card-sub">Увидеть метод изнутри</p>
+      <div class="card-price">По запросу</div>
       <hr class="card-divider">
       <ul class="features">
         <li><span class="check">✓</span><span>30 минут с автором</span></li>
@@ -842,15 +680,19 @@ body {
         <li><span class="check">✓</span><span>Запись остаётся у вас</span></li>
         <li><span class="check">✓</span><span>Онлайн или офлайн</span></li>
       </ul>
+      <div class="card-btns">
+        <a href="https://koalendar.com/e/hypothesis-canvas"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn--secondary">Записаться</a>
+      </div>
     </article>
 
     <!-- Инженер -->
     <article class="card card--dark">
-      <div class="card-header">
-        <p class="card-name">Инженер</p>
-        <span class="card-badge">Рекомендуем</span>
-      </div>
-      <p class="card-sub">Решение своего кейса</p>
+      <span class="card-badge">Рекомендуем</span>
+      <p class="card-name">Инженер</p>
+      <p class="card-sub">Решить свой кейс</p>
+      <div class="card-price">По запросу</div>
       <hr class="card-divider">
       <ul class="features">
         <li><span class="check">✓</span><span>45 минут с автором</span></li>
@@ -863,30 +705,38 @@ body {
         <li><span class="check">✓</span><span>Запись остаётся у вас</span></li>
         <li><span class="check">✓</span><span>Онлайн или офлайн</span></li>
       </ul>
+      <div class="card-btns">
+        <a href="https://koalendar.com/e/hypothesis-canvas"
+           target="_blank" rel="noopener noreferrer"
+           class="btn btn--primary">Записаться</a>
+      </div>
     </article>
 
   </div>
 
-  <!-- ─── БЛОК КОНТАКТОВ ───────────────────────────────────── -->
+  <!-- ─── CTA БЛОК ─────────────────────────────────────────── -->
   <div class="cta">
 
-    <!-- Запись на сессию -->
+    <!-- Запись — тёмная карточка -->
     <div class="cta-card cta-card--dark">
       <p class="cta-card-label">Аналитик · Инженер</p>
-      <p class="cta-card-text">Напишите в Telegram — обсудим детали и выберем время для мастеркласса или разбора вашего кейса</p>
+      <p class="cta-card-text">Забронируйте удобный слот в календаре — и сразу напишите мне в Telegram, чтобы я подтвердила запись</p>
+      <div class="cta-card-note">
+        ⚠︎ Важно: бронирование в календаре без сообщения в личку не является подтверждением сессии
+      </div>
       <a href="https://t.me/Elena_Bezglasnaia"
-         target="_blank"
-         rel="noopener noreferrer"
+         target="_blank" rel="noopener noreferrer"
          class="cta-card-link">@Elena_Bezglasnaia</a>
     </div>
 
     <!-- Канал -->
     <div class="cta-card">
       <p class="cta-card-label">Канал</p>
-      <p class="cta-card-text">Больше материалов о доказательном предпринимательстве</p>
+      <p class="cta-card-text">В канале «Без шума» — мысли, наблюдения и факты про доказательное предпринимательство</p>
+      <blockquote class="cta-quote">Доказательное предпринимательство — эмпирический подход к принятию решений в условиях неопределённости, основанный на логике научного метода</blockquote>
+      <p class="cta-card-text">Верю, что 20% рациональности — это совсем не скучно А 80% оставляю на креатив, интуицию и прыжок веры</p>
       <a href="https://t.me/bezshuma_channel"
-         target="_blank"
-         rel="noopener noreferrer"
+         target="_blank" rel="noopener noreferrer"
          class="cta-card-link">@bezshuma_channel</a>
     </div>
 
@@ -895,10 +745,12 @@ body {
   <!-- ─── ПОДВАЛ ─────────────────────────────────────────────── -->
   <footer class="footer">
     <a href="https://tracker63.tilda.ws/privacy"
-       target="_blank"
-       rel="noopener noreferrer">Политика обработки персональных данных</a>
+       target="_blank" rel="noopener noreferrer">Политика обработки персональных данных</a>
     <br>
     © ИП Безгласная Елена Алексеевна · ИНН 631503578469
+    <br>
+    © 2026 Elena Bezglasnaia ·
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-ND 4.0</a>
     <br>
     <a href="#top" class="back-top">↑ Наверх</a>
   </footer>
@@ -906,7 +758,6 @@ body {
 </div><!-- /wrap -->
 
 <script>
-// ─── Тренажёр — показать/скрыть полный вопрос ────────────
 function toggleTrainer() {
   const expanded = document.getElementById('trainer-expanded');
   const btn = document.getElementById('trainer-btn');
@@ -914,7 +765,6 @@ function toggleTrainer() {
   expanded.classList.toggle('open');
   btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
 }
-
 </script>
 
 </body>
