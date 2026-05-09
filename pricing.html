@@ -222,6 +222,14 @@ body {
   line-height: 1.5;
 }
 
+/* ─── РАЗВЁРТКА КАНВАСА — скрыта по умолчанию ───────────── */
+.canvas-expanded {
+  display: none;
+}
+.canvas-expanded.open {
+  display: block;
+}
+
 /* ─── ПРЕВЬЮ КАНВАСА ─────────────────────────────────────── */
 .tool-preview-img {
   display: block;
@@ -479,7 +487,10 @@ body {
   line-height: 1.65;
   flex: 1;
 }
-.cta-card--dark .cta-card-text { color: var(--c-gold-light); }
+.cta-card--dark .cta-card-text {
+  color: var(--c-gold-light);
+  flex: 0; /* убираем растяжку — Важно поднимается вверх */
+}
 
 /* Предупреждение о подтверждении — по центру */
 .cta-card-note {
@@ -631,11 +642,13 @@ body {
         <p class="tool-title">Канвас «Монополия гипотез»</p>
       </div>
       <p class="tool-caption">Кейс составлен по материалам ФРИИ</p>
-      <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="tool-preview-img">
-        <img src="examplefilled.png" alt="Пример заполненного канваса">
-      </a>
+      <div class="canvas-expanded" id="canvas-expanded">
+        <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="tool-preview-img">
+          <img src="examplefilled.png" alt="Пример заполненного канваса">
+        </a>
+      </div>
       <div class="tool-btns">
-        <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Посмотреть пример</a>
+        <button class="btn btn--secondary" id="canvas-btn" onclick="toggleCanvas()">Посмотреть пример</button>
         <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть канвас</a>
       </div>
     </div>
@@ -768,6 +781,14 @@ function toggleTrainer() {
   const isOpen = expanded.classList.contains('open');
   expanded.classList.toggle('open');
   btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
+}
+
+function toggleCanvas() {
+  const expanded = document.getElementById('canvas-expanded');
+  const btn = document.getElementById('canvas-btn');
+  const isOpen = expanded.classList.contains('open');
+  expanded.classList.toggle('open');
+  btn.textContent = isOpen ? 'Посмотреть пример' : 'Свернуть';
 }
 </script>
 
