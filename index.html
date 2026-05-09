@@ -503,10 +503,16 @@ body::before {
 
 <script>
 // =============================================
-// SESSION ID — уникальный идентификатор сессии
+// ИДЕНТИФИКАЦИЯ И СЧЕТЧИКИ
 // =============================================
+var USER_ID = localStorage.getItem('canvas_user') || 'u_' + Date.now().toString(36);
+localStorage.setItem('canvas_user', USER_ID);
+
 var SESSION_ID = sessionStorage.getItem('canvas_session') || 'sess_' + Math.random().toString(36).substr(2, 9);
 sessionStorage.setItem('canvas_session', SESSION_ID);
+
+var pageLoadTime = Date.now();
+var actionCount = 0;
 
 var CARD_W = 1100, CARD_H = 778;
 var currentLang = 'ru', currentMode = 'empty';
@@ -738,21 +744,25 @@ window.addEventListener('load', function(){
 var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
 
 function trackEvent(eventName, details) {
+  actionCount++;
   try {
     var device = window.innerWidth <= 768 ? 'mobile' : 'desktop';
     var payload = {
       timestamp: new Date().toISOString(),
       event: eventName,
       session_id: SESSION_ID,
+      user_id: USER_ID,
+      action_sequence: actionCount,
+      time_on_page: Math.floor((Date.now() - pageLoadTime) / 1000),
       lang: currentLang || 'ru',
       device: device,
       details: details || ''
     };
     fetch(ANALYTICS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(payload)
-});
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify(payload)
+    });
   } catch(e) {}
 }
 </script>
