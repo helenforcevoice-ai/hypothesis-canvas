@@ -142,25 +142,17 @@ body {
   color: var(--c-gold);
 }
 
-/* Hero кнопка */
-.hero-btn {
-  display: inline-flex;
-  align-items: center;
+/* Ghost — прозрачная кнопка (для hero и тёмных фонов) */
+.btn--ghost {
   background: transparent;
-  border: 1px solid var(--c-gold);
+  border-color: var(--c-gold);
   color: var(--c-gold);
-  padding: 8px 20px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  font-family: inherit;
-  text-decoration: none;
-  transition: background 0.2s;
+  font-weight: 400;
 }
-.hero-btn:hover { background: rgba(184,147,58,0.15); }
+.btn--ghost:hover { background: rgba(184,147,58,0.15); }
 
 /* Focus */
-.btn:focus-visible,
-.hero-btn:focus-visible {
+.btn:focus-visible {
   outline: 2px solid var(--c-gold);
   outline-offset: 2px;
 }
@@ -178,6 +170,7 @@ body {
   box-shadow: var(--shadow);
 }
 .context strong { color: var(--c-brown); }
+.context p + p { margin-top: 0.75rem; }
 
 /* ─── БЛОК ИНСТРУМЕНТОВ ──────────────────────────────────── */
 .tools {
@@ -235,12 +228,11 @@ body {
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #E8E0CC;
-  flex: 1;
-  min-height: 0;
+  max-height: 160px;
 }
 .tool-preview-img img {
   width: 100%;
-  height: 100%;
+  height: 160px;
   object-fit: cover;
   object-position: top left;
   display: block;
@@ -440,6 +432,17 @@ body {
   font-size: 14px;
 }
 
+/* ─── ЗАГОЛОВОК ТАРИФОВ ──────────────────────────────────── */
+.pricing-title {
+  grid-column: 1 / -1;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--c-text);
+  text-align: center;
+  padding-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+
 /* ─── CTA БЛОК ───────────────────────────────────────────── */
 .cta {
   display: grid;
@@ -478,15 +481,16 @@ body {
 }
 .cta-card--dark .cta-card-text { color: var(--c-gold-light); }
 
-/* Предупреждение о подтверждении */
+/* Предупреждение о подтверждении — по центру */
 .cta-card-note {
   font-size: 12px;
   color: var(--c-gold-mid);
   line-height: 1.55;
-  padding: 8px 10px;
+  padding: 10px 14px;
   border: 1px solid rgba(184,147,58,0.3);
   border-radius: var(--radius-md);
   background: rgba(184,147,58,0.06);
+  text-align: center;
 }
 
 .cta-card-link {
@@ -546,7 +550,7 @@ body {
 
 /* ─── ПЕЧАТЬ ─────────────────────────────────────────────── */
 @media print {
-  .hero-btn, .cta, .back-top, .footer { display: none; }
+  .btn--ghost, .cta, .back-top, .footer { display: none; }
   .hero { min-height: auto; }
 }
 </style>
@@ -562,20 +566,20 @@ body {
     <div class="hero-content">
       <h1>Монополия гипотез</h1>
       <p>Канвас и тренажёр для работы с бизнес-гипотезами</p>
-      <a href="#pricing" class="hero-btn">Выбрать формат ↓</a>
+      <a href="#pricing" class="btn btn--ghost">Выбрать формат ↓</a>
     </div>
   </section>
 
   <!-- ─── КОНТЕКСТ ──────────────────────────────────────────── -->
   <div class="context">
-    <strong>«Монополия гипотез»</strong> — канвас и тренажёр для тех, кто работает
+    <p><strong>«Монополия гипотез»</strong> — канвас и тренажёр для тех, кто работает
     в продуктовой логике: строит гипотезы для своего проекта или помогает
-    собрать их для чужого<br><br>
-    Большинство называют гипотезой то, что является планом. <strong>Тренажёр
+    собрать их для чужого</p>
+    <p>Большинство называют гипотезой то, что является планом. <strong>Тренажёр
     «Крылья братьев Райт»</strong> проверяет, насколько точно вы различаете
-    категории мышления — за 13 вопросов. Результат бывает неожиданным<br><br>
-    <strong>Канвас «Монополия гипотез»</strong> даёт структуру: сначала строим и проверяем
-    гипотезы, потом выбираем идеи
+    категории мышления — за 13 вопросов. Результат бывает неожиданным</p>
+    <p><strong>Канвас «Монополия гипотез»</strong> даёт структуру: сначала строим и проверяем
+    гипотезы, потом выбираем идеи</p>
   </div>
 
   <!-- ─── ИНСТРУМЕНТЫ ──────────────────────────────────────── -->
@@ -640,6 +644,7 @@ body {
 
   <!-- ─── КАРТОЧКИ ТАРИФОВ ─────────────────────────────────── -->
   <div class="cards" id="pricing">
+    <h2 class="pricing-title">Форматы работы</h2>
 
     <!-- Наблюдатель -->
     <article class="card">
@@ -722,7 +727,8 @@ body {
       <p class="cta-card-label">Аналитик · Инженер</p>
       <p class="cta-card-text">Забронируйте удобный слот в календаре — и сразу напишите мне в Telegram, чтобы я подтвердила запись</p>
       <div class="cta-card-note">
-        ⚠︎ Важно: бронирование в календаре без сообщения в личку не является подтверждением сессии
+        ⚠︎ Важно: бронирование в календаре без <strong>сообщения в личку</strong><br>
+        не является подтверждением сессии
       </div>
       <a href="https://t.me/Elena_Bezglasnaia"
          target="_blank" rel="noopener noreferrer"
@@ -747,9 +753,7 @@ body {
     <a href="https://tracker63.tilda.ws/privacy"
        target="_blank" rel="noopener noreferrer">Политика обработки персональных данных</a>
     <br>
-    © ИП Безгласная Елена Алексеевна · ИНН 631503578469
-    <br>
-    © 2026 Elena Bezglasnaia ·
+    © ИП Безгласная Елена Алексеевна · ИНН 631503578469 ·
     <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-ND 4.0</a>
     <br>
     <a href="#top" class="back-top">↑ Наверх</a>
