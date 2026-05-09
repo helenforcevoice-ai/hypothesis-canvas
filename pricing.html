@@ -487,10 +487,7 @@ body {
   line-height: 1.65;
   flex: 1;
 }
-.cta-card--dark .cta-card-text {
-  color: var(--c-gold-light);
-  flex: 0; /* убираем растяжку — Важно поднимается вверх */
-}
+.cta-card--dark .cta-card-text { color: var(--c-gold-light); }
 
 /* Предупреждение о подтверждении — по центру */
 .cta-card-note {
@@ -502,6 +499,7 @@ body {
   border-radius: var(--radius-md);
   background: rgba(184,147,58,0.06);
   text-align: center;
+  margin: auto 0; /* симметричные отступы сверху и снизу */
 }
 
 .cta-card-link {
@@ -623,7 +621,7 @@ body {
       </div>
 
       <div class="tool-btns">
-        <button class="btn btn--secondary" id="trainer-btn" onclick="toggleTrainer()">Посмотреть вопрос</button>
+        <button class="btn btn--secondary" id="trainer-btn" onclick="toggleBoth()">Посмотреть вопрос</button>
         <a href="https://t.me/wright_test_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть тренажёр</a>
       </div>
     </div>
@@ -648,7 +646,7 @@ body {
         </a>
       </div>
       <div class="tool-btns">
-        <button class="btn btn--secondary" id="canvas-btn" onclick="toggleCanvas()">Посмотреть пример</button>
+        <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Посмотреть пример</a>
         <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть канвас</a>
       </div>
     </div>
@@ -775,20 +773,15 @@ body {
 </div><!-- /wrap -->
 
 <script>
-function toggleTrainer() {
-  const expanded = document.getElementById('trainer-expanded');
-  const btn = document.getElementById('trainer-btn');
-  const isOpen = expanded.classList.contains('open');
-  expanded.classList.toggle('open');
-  btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
-}
+function toggleBoth() {
+  const trainerBlock = document.getElementById('trainer-expanded');
+  const canvasBlock  = document.getElementById('canvas-expanded');
+  const btn          = document.getElementById('trainer-btn');
+  const isOpen       = trainerBlock.classList.contains('open');
 
-function toggleCanvas() {
-  const expanded = document.getElementById('canvas-expanded');
-  const btn = document.getElementById('canvas-btn');
-  const isOpen = expanded.classList.contains('open');
-  expanded.classList.toggle('open');
-  btn.textContent = isOpen ? 'Посмотреть пример' : 'Свернуть';
+  trainerBlock.classList.toggle('open');
+  canvasBlock.classList.toggle('open');
+  btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
 }
 </script>
 
