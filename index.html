@@ -527,7 +527,7 @@ var UI = {
     b4name:'Механизм', b4hint:'Это работает так:...',
     b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
     b6name:'Идея', b6hint:'Делаем...',
-    subtitle:'По материалам публичного кейса ФРИИ — «ERP для маркетплейсов»',
+    subtitle:'Маккаллоу Д. <a href="https://alpinabook.ru/catalog/book-bratya-rayt/?ysclid=modymv02t1865958647" target="_blank" style="color: var(--c-gold-light); text-decoration: underline;">Братья Райт. Люди, которые научили мир летать. — М.: Альпина, 2017</a>',
     footer:'Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a>',
     footerLeft:'\u00a9 Елена Безгласная, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href">Монополия гипотез</a>'
   },
@@ -540,7 +540,7 @@ var UI = {
     b4name:'Mechanism', b4hint:'Here\u2019s how it works:\u2026',
     b5name:'Insight', b5hint:'What do we know now? (after testing)',
     b6name:'Idea', b6hint:'We do\u2026',
-    subtitle:'Based on FRII public case — "ERP for Marketplaces"',
+    subtitle:'McCullough D. <a href="https://alpinabook.ru/catalog/book-bratya-rayt/?ysclid=modymv02t1865958647" target="_blank" style="color: var(--c-gold-light); text-decoration: underline;">The Wright Brothers. Simon & Schuster, 2015</a>',
     footer:'Terminology quiz: <a href="https://t.me/wright_test_bot" target="_blank">\u201cThe Wright Brothers\u201d</a>',
     footerLeft:'\u00a9 Elena Bezglasnaia, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Commercial use and formats: <a href="pricing.html" class="no-print-href">Monopoly of Hypotheses</a>'
   }
@@ -679,6 +679,7 @@ function applyLang(lang) {
     document.getElementById('b'+n+'name').textContent = u['b'+n+'name'];
     document.getElementById('b'+n+'hint').textContent = u['b'+n+'hint'];
   });
+  document.getElementById('header-subtitle').innerHTML = u.subtitle;
   document.getElementById('footer-right').innerHTML = u.footer;
   document.getElementById('footer-left').innerHTML = u.footerLeft;
   updateStickerTexts(lang);
@@ -738,7 +739,8 @@ window.addEventListener('load', function(){
   var _ref = new URLSearchParams(window.location.search).get('ref') || '';
   trackEvent('page_open', _ref);
 });
-  /* =============================================
+
+/* =============================================
    АНАЛИТИКА — отправка событий в Google Sheets
    ============================================= */
 var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
@@ -766,6 +768,5 @@ function trackEvent(eventName, details) {
   } catch(e) {}
 }
 </script>
-
 </body>
 </html>
