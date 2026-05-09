@@ -389,7 +389,7 @@ body::before {
     <div class="header-buttons">
       <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
       <button class="hbtn"        id="btn-example" onclick="showExample();trackEvent('example')">Пример</button>
-      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn">Изучить термины</a>
+      <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn" onclick="trackEvent('learn_terms')">Изучить термины</a>
       <button class="hbtn" onclick="printTemplate();trackEvent('download_pdf')" id="btn-pdf">Скачать PDF</button>
       <button class="hbtn" id="btn-lang" onclick="toggleLang();trackEvent('lang_'+currentLang)">EN</button>
     </div>
@@ -493,7 +493,7 @@ body::before {
   </div>
 
   <div class="footer">
-    <p id="footer-left">© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> · Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href">Монополия гипотез</a></p>
+    <p id="footer-left">© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> · Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href" onclick="trackEvent('go_to_pricing')">Монополия гипотез</a></p>
     <p id="footer-right">Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a></p>
   </div>
 
