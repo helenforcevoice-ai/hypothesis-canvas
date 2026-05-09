@@ -631,11 +631,6 @@ function buildSticker(key, text) {
   el.appendChild(back); el.appendChild(front); return el;
 }
 
-/* =============================================
-   CONFIRMED — какие чекбоксы обводим кружком в примере.
-   Формат: id атрибута элемента cb-ok.
-   Меняй здесь — не в HTML.
-   ============================================= */
 var CONFIRMED = ['chk-3-1', 'chk-3-2', 'chk-3-3'];
 
 function setConfirmed(active) {
@@ -647,8 +642,6 @@ function setConfirmed(active) {
   });
 }
 
-/* renderStickers вызывается ОДИН РАЗ при загрузке.
-   При смене языка только обновляем текст в уже созданных стикерах. */
 function renderStickers() {
   var layer = document.getElementById('stickers-layer');
   layer.innerHTML = '';
@@ -706,8 +699,6 @@ function showExample() {
   document.getElementById('btn-example').classList.add('active');
 }
 
-/* printTemplate — всегда печатает чистый шаблон,
-   независимо от текущего режима экрана. */
 function printTemplate() {
   var wasExample = currentMode === 'example';
   if (wasExample) {
@@ -740,9 +731,9 @@ window.addEventListener('load', function(){
   trackEvent('page_open', _ref);
 });
 
-/* =============================================
-   АНАЛИТИКА — отправка событий в Google Sheets
-   ============================================= */
+// =============================================
+// АНАЛИТИКА — отправка событий в Google Sheets
+// =============================================
 var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
 
 function trackEvent(eventName, details) {
