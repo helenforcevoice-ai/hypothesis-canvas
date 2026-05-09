@@ -125,12 +125,19 @@ body::before {
 .header {
   background: var(--c-dark);
   padding: 0 16px;
-  height: 44px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
   gap: 12px;
+}
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
 }
 .header-title {
   font-size: 19px;
@@ -139,11 +146,22 @@ body::before {
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
+.header-subtitle {
+  font-size: 10px;
+  color: var(--c-gold-light);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.header-subtitle.visible {
+  opacity: 1;
+}
 .header-buttons {
   display: flex;
   gap: 6px;
-  flex: 1;
-  justify-content: flex-end;
+  flex-shrink: 0;
 }
 .hbtn {
   background: transparent;
@@ -179,24 +197,6 @@ body::before {
   z-index: 10;
 }
 .stickers-layer.visible { display: block; }
-
-.example-caption {
-  display: none;
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  color: var(--c-brown-hint);
-  font-style: italic;
-  white-space: nowrap;
-  pointer-events: none;
-  background: rgba(245,240,228,0.82);
-  padding: 2px 8px;
-  border-radius: 3px;
-  z-index: 11;
-}
-.example-caption.visible { display: block; }
 
 .sticker { position: absolute; width: 108px; height: 96px; }
 .sticker-back {
@@ -362,8 +362,8 @@ body::before {
   body { background-color: var(--c-bg) !important; background-image: none !important; overflow: visible; margin: 0; padding: 0; }
   body::before { display: none !important; }
   .header-buttons { display: none !important; }
+  .header-subtitle { display: none !important; }
   .stickers-layer { display: none !important; }
-  .example-caption { display: none !important; }
   .rows-wrap { display: flex !important; }
   .card {
     zoom: 1 !important; visibility: visible !important;
@@ -385,7 +385,10 @@ body::before {
 <div class="card" id="card">
 
   <div class="header">
-    <p class="header-title" id="hdr-title">Монополия гипотез</p>
+    <div class="header-left">
+      <p class="header-title" id="hdr-title">Монополия гипотез</p>
+      <p class="header-subtitle" id="header-subtitle">По материалам публичного кейса ФРИИ — «ERP для маркетплейсов»</p>
+    </div>
     <div class="header-buttons">
       <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
       <button class="hbtn"        id="btn-example" onclick="showExample();trackEvent('example')">Пример</button>
@@ -398,7 +401,6 @@ body::before {
   <div class="rows-wrap" id="rows-wrap">
 
     <div class="stickers-layer" id="stickers-layer"></div>
-    <p class="example-caption" id="example-caption">Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)</p>
 
     <div class="grid g4">
       <div class="cell">
@@ -500,6 +502,12 @@ body::before {
 </div>
 
 <script>
+// =============================================
+// SESSION ID — уникальный идентификатор сессии
+// =============================================
+var SESSION_ID = sessionStorage.getItem('canvas_session') || 'sess_' + Math.random().toString(36).substr(2, 9);
+sessionStorage.setItem('canvas_session', SESSION_ID);
+
 var CARD_W = 1100, CARD_H = 778;
 var currentLang = 'ru', currentMode = 'empty';
 
@@ -513,7 +521,7 @@ var UI = {
     b4name:'Механизм', b4hint:'Это работает так:...',
     b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
     b6name:'Идея', b6hint:'Делаем...',
-    caption:'Пример заполнен по кейсу из книги Дэвида Маккалоу «Братья Райт» (Alpina, 2017)',
+    subtitle:'По материалам публичного кейса ФРИИ — «ERP для маркетплейсов»',
     footer:'Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a>',
     footerLeft:'\u00a9 Елена Безгласная, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href">Монополия гипотез</a>'
   },
@@ -526,7 +534,7 @@ var UI = {
     b4name:'Mechanism', b4hint:'Here\u2019s how it works:\u2026',
     b5name:'Insight', b5hint:'What do we know now? (after testing)',
     b6name:'Idea', b6hint:'We do\u2026',
-    caption:'Example based on David McCullough\u2019s \u201cThe Wright Brothers\u201d (Simon & Schuster, 2015)',
+    subtitle:'Based on FRII public case — "ERP for Marketplaces"',
     footer:'Terminology quiz: <a href="https://t.me/wright_test_bot" target="_blank">\u201cThe Wright Brothers\u201d</a>',
     footerLeft:'\u00a9 Elena Bezglasnaia, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Commercial use and formats: <a href="pricing.html" class="no-print-href">Monopoly of Hypotheses</a>'
   }
@@ -665,7 +673,6 @@ function applyLang(lang) {
     document.getElementById('b'+n+'name').textContent = u['b'+n+'name'];
     document.getElementById('b'+n+'hint').textContent = u['b'+n+'hint'];
   });
-  document.getElementById('example-caption').textContent = u.caption;
   document.getElementById('footer-right').innerHTML = u.footer;
   document.getElementById('footer-left').innerHTML = u.footerLeft;
   updateStickerTexts(lang);
@@ -677,7 +684,7 @@ function showEmpty() {
   currentMode = 'empty';
   setConfirmed(false);
   document.getElementById('stickers-layer').classList.remove('visible');
-  document.getElementById('example-caption').classList.remove('visible');
+  document.getElementById('header-subtitle').classList.remove('visible');
   document.getElementById('btn-empty').classList.add('active');
   document.getElementById('btn-example').classList.remove('active');
 }
@@ -687,7 +694,7 @@ function showExample() {
   setConfirmed(true);
   updateStickerTexts(currentLang);
   document.getElementById('stickers-layer').classList.add('visible');
-  document.getElementById('example-caption').classList.add('visible');
+  document.getElementById('header-subtitle').classList.add('visible');
   document.getElementById('btn-empty').classList.remove('active');
   document.getElementById('btn-example').classList.add('active');
 }
@@ -699,13 +706,13 @@ function printTemplate() {
   if (wasExample) {
     setConfirmed(false);
     document.getElementById('stickers-layer').classList.remove('visible');
-    document.getElementById('example-caption').classList.remove('visible');
+    document.getElementById('header-subtitle').classList.remove('visible');
   }
   window.print();
   if (wasExample) {
     setConfirmed(true);
     document.getElementById('stickers-layer').classList.add('visible');
-    document.getElementById('example-caption').classList.add('visible');
+    document.getElementById('header-subtitle').classList.add('visible');
   }
 }
 
@@ -736,6 +743,7 @@ function trackEvent(eventName, details) {
     var payload = {
       timestamp: new Date().toISOString(),
       event: eventName,
+      session_id: SESSION_ID,
       lang: currentLang || 'ru',
       device: device,
       details: details || ''
