@@ -390,7 +390,7 @@ body::before {
       <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
       <button class="hbtn"        id="btn-example" onclick="showExample();trackEvent('example')">Пример</button>
       <a href="https://t.me/wright_test_bot" target="_blank" class="hbtn" id="btn-learn">Изучить термины</a>
-      <button class="hbtn" onclick="printTemplate()" id="btn-pdf">Скачать PDF</button>
+      <button class="hbtn" onclick="printTemplate();trackEvent('download_pdf')" id="btn-pdf">Скачать PDF</button>
       <button class="hbtn" id="btn-lang" onclick="toggleLang();trackEvent('lang_'+currentLang)">EN</button>
     </div>
   </div>
