@@ -3,29 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Монополия гипотез — Форматы работы</title>
-
-<!-- Favicon — inline SVG, без отдельного файла -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232C1A0E'/><text y='.85em' x='.1em' font-size='80' fill='%23B8933A'>М</text></svg>">
-
-<!-- Open Graph -->
-<meta property="og:title" content="Монополия гипотез — Форматы работы">
-<meta property="og:description" content="Канвас и тренажёр для работы с бизнес-гипотезами. Три формата: самостоятельно, мастеркласс, разбор кейса.">
-<meta property="og:url" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pricing">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pic.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Монополия гипотез — Форматы работы">
-<meta name="twitter:description" content="Канвас и тренажёр для работы с бизнес-гипотезами.">
-<meta name="twitter:image" content="https://helenforcevoice-ai.github.io/hypothesis-canvas/pic.png">
-
-<!-- PT Sans -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=PT+Sans:wght@400;700&display=swap" rel="stylesheet">
-
+<title>Монополия гипотез — Пример: кейс ФРИИ</title>
 <style>
-/* ─── ПЕРЕМЕННЫЕ ─────────────────────────────────────────── */
+
+/* =============================================
+   ПЕРЕМЕННЫЕ
+   ============================================= */
 :root {
   --c-dark:       #2C1A0E;
   --c-gold:       #B8933A;
@@ -33,738 +16,579 @@
   --c-gold-light: #DDD0B0;
   --c-brown:      #6B4C2A;
   --c-brown-hint: #8C6D4F;
-  --c-bg:         #F5F0E4;
-  --c-bg-card:    #FFFFFF;
-  --c-text:       #2C1A0E;
-  --radius-lg:    12px;
-  --radius-md:    6px;
-  --shadow:       0 2px 16px rgba(44,26,14,0.08);
+  --c-bg:         #F0EAD8;
+  --c-bg-card:    #F5F0E4;
+  --c-bg-field:   #FAF7F0;
+  --c-bg-num:     #F5EED8;
+  --c-bg-footer:  #EDE5D0;
+  --c-text-light: #F5F0E4;
+
+  --card-w: 1100px;
+  --card-h: 778px;
+  --border-main: 1.5px solid var(--c-gold);
+  --border-cell: 0.5px solid var(--c-gold-mid);
+  --border-line: 0.5px solid var(--c-gold-light);
 }
 
-/* ─── СБРОС ──────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'PT Sans', Georgia, serif;
-  background: var(--c-bg);
-  color: var(--c-text);
-  line-height: 1.6;
-  min-height: 100vh;
-}
+/* =============================================
+   СБРОС
+   ============================================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ─── КОНТЕЙНЕР (расширен до 1100px) ─────────────────────── */
-.wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px 16px 48px;
-}
-
-/* ─── HERO (увеличен до 290px) ───────────────────────────── */
-.hero {
-  position: relative;
+html {
   overflow: hidden;
-  border-radius: var(--radius-lg);
-  min-height: 290px;
+}
+
+body {
+  background: var(--c-bg);
+  font-family: 'PT Sans', Georgia, sans-serif;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =============================================
+   КАРТОЧКА — фиксированный А4 альбомный.
+   Кнопки внутри шапки — масштабируются вместе с карточкой.
+   visibility: hidden до JS — без мигания при загрузке.
+   ============================================= */
+.card {
+  width: var(--card-w);
+  height: var(--card-h);
+  visibility: hidden;
+  border: 2px solid var(--c-gold);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--c-bg-card);
+  box-shadow: 0 4px 32px rgba(44,26,14,0.13);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 2.5rem 2rem 2rem;
-  margin-bottom: 1.5rem;
+}
+
+/* =============================================
+   ШАПКА — содержит название и кнопки.
+   Кнопки внутри карточки — всегда видны при переключении.
+   flex-shrink: 0 — не участвует в делении высоты рядами.
+   ============================================= */
+.header {
   background: var(--c-dark);
+  padding: 0 16px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 12px;
 }
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url('pic.png');
-  background-size: cover;
-  background-position: top center;
-  z-index: 0;
-}
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(44,26,14,0.35) 0%, rgba(44,26,14,0.88) 100%);
-  z-index: 1;
-}
-.hero-content { position: relative; z-index: 2; }
-.hero h1 {
-  font-size: clamp(24px, 4vw, 34px);
+.header-title {
+  font-size: 19px;
   font-weight: 700;
-  color: var(--c-bg);
-  margin-bottom: 6px;
+  color: var(--c-text-light);
+  white-space: nowrap;
   letter-spacing: 0.01em;
 }
-.hero p {
-  font-size: 16px;
-  color: var(--c-gold-light);
-  margin-bottom: 1.5rem;
+.header-buttons {
+  display: flex;
+  gap: 6px;
+  flex: 1; /* растягивается на всю оставшуюся ширину шапки */
+  justify-content: flex-end; /* кнопки прижаты вправо */
 }
-
-/* ─── КНОПКИ — три уровня ────────────────────────────────── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 18px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  font-weight: 700;
-  font-family: inherit;
-  text-decoration: none;
+.hbtn {
+  background: transparent;
+  color: var(--c-text-light);
+  border: 1px solid rgba(245,240,228,0.35);
+  border-radius: 4px;
+  padding: 4px 11px;
+  font-size: 10.5px;
+  font-family: 'PT Sans', Georgia, sans-serif;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, opacity 0.2s;
-  border: 1.5px solid var(--c-gold);
   white-space: nowrap;
-}
-/* Primary — золотая заливка */
-.btn--primary {
-  background: var(--c-gold);
-  color: var(--c-dark);
-  border-color: var(--c-gold);
-}
-.btn--primary:hover { background: var(--c-gold-mid); border-color: var(--c-gold-mid); }
-
-/* Secondary — контур */
-.btn--secondary {
-  background: transparent;
-  color: var(--c-text);
-  border-color: var(--c-gold);
-}
-.btn--secondary:hover { background: rgba(184,147,58,0.08); }
-
-/* Secondary на тёмном фоне */
-.card--dark .btn--secondary {
-  color: var(--c-gold);
-}
-.card--dark .btn--secondary:hover { background: rgba(184,147,58,0.12); }
-.cta-card--dark .btn--secondary {
-  color: var(--c-gold);
-}
-
-/* Hero кнопка */
-.hero-btn {
+  letter-spacing: 0.04em;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  background: transparent;
-  border: 1px solid var(--c-gold);
+}
+.hbtn:hover {
+  border-color: rgba(245,240,228,0.8);
+  background: rgba(245,240,228,0.08);
+}
+.hbtn.active {
+  border-color: var(--c-gold);
   color: var(--c-gold);
-  padding: 8px 20px;
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  font-family: inherit;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.hero-btn:hover { background: rgba(184,147,58,0.15); }
-
-/* Focus */
-.btn:focus-visible,
-.hero-btn:focus-visible {
-  outline: 2px solid var(--c-gold);
-  outline-offset: 2px;
-}
-.btn:active { opacity: 0.85; }
-
-/* ─── БЛОК КОНТЕКСТА ─────────────────────────────────────── */
-.context {
-  background: var(--c-bg-card);
-  border: 1px solid #E8E0CC;
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  font-size: 15px;
-  line-height: 1.75;
-  box-shadow: var(--shadow);
-}
-.context strong { color: var(--c-brown); }
-
-/* ─── БЛОК ИНСТРУМЕНТОВ ──────────────────────────────────── */
-.tools {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-.tool-card {
-  background: var(--c-bg-card);
-  border: 1px solid #E8E0CC;
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  box-shadow: var(--shadow);
-}
-.tool-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.tool-icon {
-  width: 36px; height: 36px;
-  background: var(--c-dark);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.tool-icon svg {
-  width: 18px; height: 18px;
-  fill: none;
-  stroke: var(--c-gold);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.tool-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--c-text);
-}
-.tool-caption {
-  font-size: 12px;
-  color: var(--c-brown-hint);
-  line-height: 1.5;
 }
 
-/* ─── ПРЕВЬЮ КАНВАСА ─────────────────────────────────────── */
-.tool-preview-img {
-  display: block;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #E8E0CC;
+/* =============================================
+   ПРИМЕР — img между шапкой и подвалом.
+   Скрыт по умолчанию, показывается вместо рядов.
+   ============================================= */
+.example-view {
+  display: none;
   flex: 1;
+  overflow: hidden;
   min-height: 0;
 }
-.tool-preview-img img {
+.example-view img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top left;
   display: block;
-  transition: opacity 0.2s;
 }
-.tool-preview-img:hover img { opacity: 0.88; }
 
-/* ─── ЦИТАТА В БЛОКЕ КАНАЛА ──────────────────────────────── */
-.cta-quote {
-  border-left: 3px solid var(--c-gold);
-  padding-left: 12px;
-  font-size: 13px;
+/* =============================================
+   ОБЁРТКА РЯДОВ — переключается при showExample/showEmpty.
+   ============================================= */
+.rows-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* =============================================
+   РЯДЫ — три ряда делят высоту поровну.
+   ============================================= */
+.grid {
+  display: grid;
+  flex: 1;
+  border-top: var(--border-main);
+  min-height: 0;
+}
+.g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.grid.row2 { border-top: 1px solid var(--c-gold-mid); }
+
+.row3 {
+  display: flex;
+  flex: 1;
+  border-top: var(--border-main);
+  min-height: 0;
+}
+
+/* =============================================
+   ЯЧЕЙКИ
+   ============================================= */
+.cell {
+  padding: 6px 8px;
+  border-right: 1px solid var(--c-gold-mid);
+  border-bottom: 1px solid var(--c-gold-mid);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.cell.nr { border-right: none; }
+.cell.nb { border-bottom: none; }
+.span2 { grid-column: span 2; }
+.span3 { grid-column: span 3; }
+
+.cell-idea {
+  flex: 3;
+  padding: 6px 8px;
+  border-right: 1px solid var(--c-gold-mid);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.cell-rice {
+  flex: 1;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* =============================================
+   ТИПОГРАФИКА БЛОКОВ.
+   Иерархия: крупный номер (якорь) → название (метка) → подсказка.
+   ============================================= */
+.block-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+.bn {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--c-gold);
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+.bname {
+  font-size: 11px;
+  font-weight: 700;
   color: var(--c-brown);
-  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bhint {
+  font-size: 10px;
+  color: var(--c-brown-hint);
+  margin-bottom: 5px;
+  flex-shrink: 0;
   font-style: italic;
 }
 
-/* ─── КНОПКИ ИНСТРУМЕНТОВ — на всю ширину, в ряд ────────── */
-.tool-btns {
-  display: flex;
-  gap: 8px;
-  margin-top: auto;
-}
-.tool-btns .btn {
+/* =============================================
+   ЛИНОВАННЫЕ ПОЛЯ
+   ============================================= */
+.lined {
   flex: 1;
-  font-size: 13px;
-}
-
-/* ─── РАЗВЁРТКА ВОПРОСА — с левой границей ───────────────── */
-.trainer-expanded {
-  display: none;
-  flex-direction: column;
-  gap: 8px;
-}
-.trainer-expanded.open {
-  display: flex;
-  border-left: 3px solid var(--c-gold);
-  padding-left: 12px;
-  margin-top: 4px;
-}
-.trainer-q {
-  font-weight: 700;
-  font-size: 13px;
-  color: var(--c-text);
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-.trainer-options {
-  list-style: none;
+  border: var(--border-cell);
+  border-radius: 4px;
+  background: var(--c-bg-field);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-.trainer-options li {
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  color: var(--c-brown);
-  border: 1px solid #E8E0CC;
-  background: var(--c-bg);
-  line-height: 1.5;
-}
-.trainer-options li.correct {
-  background: rgba(184,147,58,0.10);
-  border-color: var(--c-gold);
-  color: var(--c-text);
-  font-weight: 700;
-}
-.trainer-options li.correct::before {
-  content: '✓ ';
-  color: var(--c-gold);
+  min-height: 0;
 }
 
-/* ─── КАРТОЧКИ ТАРИФОВ ───────────────────────────────────── */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 1.5rem;
-  /* Отступ сверху — чтобы абсолютный бейдж «Рекомендуем» не обрезался */
-  padding-top: 18px;
+/* =============================================
+   СТРОКИ
+   ============================================= */
+.row {
+  flex: 1;
+  display: flex;
   align-items: stretch;
+  border-bottom: var(--border-line);
+  min-height: 0;
 }
+.row:last-child { border-bottom: none; }
 
-.card {
-  position: relative;
-  background: var(--c-bg-card);
-  border: 1px solid #E8E0CC;
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1rem 1.25rem;
+/* =============================================
+   НУМЕРАЦИЯ СТРОК
+   ============================================= */
+.ln {
+  width: 18px;
+  min-width: 18px;
   display: flex;
-  flex-direction: column;
-  box-shadow: var(--shadow);
-  transition: transform 0.2s;
-}
-.card:hover { transform: translateY(-2px); }
-
-/* Тёмная карточка — Инженер */
-.card--dark {
-  background: var(--c-dark);
-  border-color: var(--c-gold);
-  border-width: 1.5px;
-}
-
-/* ─── БЕЙДЖ — position absolute, по центру сверху ────────── */
-.card-badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--c-gold);
-  color: var(--c-dark);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 14px;
-  border-radius: 20px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.card-name {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--c-text);
-  margin-bottom: 2px;
-}
-.card--dark .card-name { color: var(--c-bg); }
-
-.card-sub {
-  font-size: 13px;
-  color: var(--c-brown-hint);
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-.card--dark .card-sub { color: var(--c-gold-mid); }
-
-/* ─── ЦЕНА ───────────────────────────────────────────────── */
-.card-price {
-  font-size: 1.7rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
   font-weight: 700;
   color: var(--c-gold);
-  margin-bottom: 14px;
-  line-height: 1.1;
-}
-.card--dark .card-price { color: var(--c-gold-mid); }
-
-.card-divider {
-  border: none;
-  border-top: 1px solid #E8E0CC;
-  margin-bottom: 12px;
-}
-.card--dark .card-divider { border-color: rgba(184,147,58,0.25); }
-
-/* ─── СПИСОК ФИЧ ─────────────────────────────────────────── */
-.features {
-  list-style: none;
-  flex: 1;
-}
-.features li {
-  font-size: 14px;
-  color: var(--c-text);
-  padding: 4px 0;
-  display: flex;
-  gap: 8px;
-  line-height: 1.5;
-}
-.card--dark .features li { color: var(--c-gold-light); }
-
-.features .check {
-  color: var(--c-gold);
+  border-right: var(--border-line);
+  background: var(--c-bg-num);
   flex-shrink: 0;
-  font-weight: 700;
-  font-size: 14px;
-  margin-top: 1px;
+  font-family: monospace;
 }
-.card--dark .features .check { color: var(--c-gold-mid); }
+.la { flex: 1; }
 
-/* Разделитель внутри списка */
-.features-sep {
-  border: none;
-  border-top: 1px solid #E8E0CC;
-  margin: 8px 0;
-}
-.card--dark .features-sep { border-color: rgba(184,147,58,0.2); }
-
-/* ─── КНОПКИ В КАРТОЧКЕ ──────────────────────────────────── */
-.card-btns {
+/* ЧЕКБОКСЫ — фиксированная ширина 70px, не нужен JS */
+.cba { flex: 1; }
+.cbc {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-left: var(--border-line);
+  background: var(--c-bg-num);
+  flex-shrink: 0;
+  width: 70px;
 }
-.card-btns .btn {
-  width: 100%;
-  font-size: 14px;
-}
-
-/* ─── CTA БЛОК ───────────────────────────────────────────── */
-.cta {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-}
-.cta-card {
-  background: var(--c-bg-card);
-  border: 1px solid #E8E0CC;
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+.cb {
+  width: 14px;
+  height: 14px;
+  border: 0.8px solid var(--c-gold-mid);
+  border-radius: 3px;
+  background: var(--c-bg-field);
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.cta-card--dark {
-  background: var(--c-dark);
-  border-color: var(--c-gold);
-}
-.cta-card-label {
-  font-size: 11px;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--c-brown-hint);
 }
-.cta-card--dark .cta-card-label { color: var(--c-gold-mid); }
+.cb-ok { color: var(--c-brown); }
+.cb-no { color: var(--c-gold); }
 
-.cta-card-text {
-  font-size: 14px;
-  color: var(--c-brown);
-  line-height: 1.65;
+/* =============================================
+   ЗАПОЛНЕННЫЕ СТРОКИ — текст по линеечкам
+   ============================================= */
+.la-text {
   flex: 1;
+  font-size: 9.5px;
+  color: var(--c-dark);
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  line-height: 1.3;
 }
-.cta-card--dark .cta-card-text { color: var(--c-gold-light); }
-
-/* Предупреждение о подтверждении */
-.cta-card-note {
-  font-size: 12px;
-  color: var(--c-gold-mid);
-  line-height: 1.55;
-  padding: 8px 10px;
-  border: 1px solid rgba(184,147,58,0.3);
-  border-radius: var(--radius-md);
-  background: rgba(184,147,58,0.06);
+.la-text-md {
+  flex: 1;
+  font-size: 14px;
+  color: var(--c-dark);
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  line-height: 1.3;
+}
+.la-text-lg {
+  flex: 1;
+  font-size: 13px;
+  color: var(--c-dark);
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  line-height: 1.3;
 }
 
-.cta-card-link {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: 700;
+.cba-text {
+  flex: 1;
+  font-size: 10.5px;
+  color: var(--c-dark);
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  line-height: 1.3;
+}
+
+/* Кружок вокруг подтверждённого чекбокса — красный круг */
+.cb-checked-ok {
+  box-shadow: 0 0 0 2px #C0392B;
+  border-radius: 50%;
+  border-color: var(--c-gold-mid);
+  background: var(--c-bg-field);
+  color: var(--c-brown);
+}
+
+/* Кружок вокруг опровергнутого чекбокса — красный круг */
+.cb-checked-no {
+  box-shadow: 0 0 0 2px #C0392B;
+  border-radius: 50%;
+  border-color: var(--c-gold-mid);
+  background: var(--c-bg-field);
   color: var(--c-gold);
-  text-decoration: none;
-  border-bottom: 1.5px solid var(--c-gold);
-  padding-bottom: 1px;
-  align-self: flex-start;
-  transition: opacity 0.2s;
 }
-.cta-card-link:hover { opacity: 0.75; }
 
-/* ─── ПОДВАЛ ─────────────────────────────────────────────── */
-.footer {
-  font-size: 12px;
-  color: var(--c-brown-hint);
+
+.rice-head-row {
+  display: flex;
+  padding-left: 18px;
+  margin-bottom: 3px;
+  height: 16px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.rice-ch {
+  flex: 1;
   text-align: center;
-  line-height: 2;
-  padding-top: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--c-brown);
+  border-right: var(--border-line);
+  line-height: 1;
 }
-.footer a {
-  color: var(--c-gold);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.footer a:hover { opacity: 0.75; }
+.rice-ch:last-child { border-right: none; color: var(--c-gold); }
+.rice-cell { flex: 1; border-right: var(--border-line); }
+.rice-cell.total { border-right: none; background: var(--c-bg-num); }
 
-.back-top {
-  display: block;
-  margin: 1rem auto 0;
-  background: transparent;
-  border: none;
-  color: var(--c-brown-hint);
-  font-size: 12px;
-  font-family: inherit;
-  cursor: pointer;
-  text-decoration: none;
-  transition: color 0.2s;
+/* =============================================
+   ПОДВАЛ
+   ============================================= */
+.footer {
+  border-top: var(--border-main);
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--c-bg-footer);
+  flex-shrink: 0;
 }
-.back-top:hover { color: var(--c-gold); }
+.footer p { font-size: 10px; color: var(--c-brown); }
+.footer a { color: var(--c-brown); font-weight: 700; text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
 
-/* ─── АДАПТИВ ────────────────────────────────────────────── */
-@media (max-width: 640px) {
-  .hero { min-height: 220px; padding: 1.75rem 1.25rem 1.5rem; }
-  .cards { grid-template-columns: 1fr; gap: 24px; }
-  .tools { grid-template-columns: 1fr; }
-  .cta { grid-template-columns: 1fr; }
-  .tool-btns { flex-direction: column; }
-}
-@media (min-width: 641px) and (max-width: 900px) {
-  .cards { grid-template-columns: 1fr 1fr; }
-  .card:last-child { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
-}
-
-/* ─── ПЕЧАТЬ ─────────────────────────────────────────────── */
+/* При печати показываем URL ссылки — браузер не печатает href по умолчанию */
 @media print {
-  .hero-btn, .cta, .back-top, .footer { display: none; }
-  .hero { min-height: auto; }
+  .footer a::after { content: " (" attr(href) ")"; font-weight: 400; }
 }
+
+/* =============================================
+   ПЕЧАТЬ
+   ============================================= */
+@page { size: A4 landscape; margin: 0; }
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: var(--c-bg); overflow: visible; margin: 0; padding: 0; }
+  .header-buttons { display: none !important; }
+  .example-view { display: none !important; }
+  .rows-wrap { display: flex !important; }
+  .card {
+    zoom: 1 !important;
+    visibility: visible !important;
+    width: 297mm !important;
+    height: 210mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-inside: avoid;
+    margin: 0 !important;
+  }
+}
+
 </style>
 </head>
+<body>
 
-<body id="top">
-<div class="wrap">
+<div class="card" id="card">
 
-  <!-- ─── HERO ─────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-bg" role="presentation" aria-hidden="true"></div>
-    <div class="hero-overlay" aria-hidden="true"></div>
-    <div class="hero-content">
-      <h1>Монополия гипотез</h1>
-      <p>Канвас и тренажёр для работы с бизнес-гипотезами</p>
-      <a href="#pricing" class="hero-btn">Выбрать формат ↓</a>
+  <div class="header">
+    <div>
+      <p class="header-title">Монополия гипотез</p>
+      <p style="font-size:9px; color:var(--c-gold-light); margin-top:2px">По материалам публичного кейса ФРИИ — <a href="https://tracking.iidf.ru/cases" target="_blank" style="color:var(--c-gold-light); text-decoration:underline">«ERP для маркетплейсов»</a></p>
     </div>
-  </section>
-
-  <!-- ─── КОНТЕКСТ ──────────────────────────────────────────── -->
-  <div class="context">
-    <strong>«Монополия гипотез»</strong> — канвас и тренажёр для тех, кто работает
-    в продуктовой логике: строит гипотезы для своего проекта или помогает
-    собрать их для чужого<br><br>
-    Большинство называют гипотезой то, что является планом. <strong>Тренажёр
-    «Крылья братьев Райт»</strong> проверяет, насколько точно вы различаете
-    категории мышления — за 13 вопросов. Результат бывает неожиданным<br><br>
-    <strong>Канвас «Монополия гипотез»</strong> даёт структуру: сначала строим и проверяем
-    гипотезы, потом выбираем идеи
+    <div class="header-buttons">
+      <a href="pricing.html" class="hbtn">← Закрыть</a>
+    </div>
   </div>
 
-  <!-- ─── ИНСТРУМЕНТЫ ──────────────────────────────────────── -->
-  <div class="tools">
+  <!-- ПРИМЕР — показан по умолчанию, скрыт для печати не нужен -->
+  <div class="example-view" id="example-view" style="display:none">
+    <img src="example-filled.png" alt="Пример заполнения канваса">
+  </div>
 
-    <!-- Тренажёр -->
-    <div class="tool-card">
-      <div class="tool-header">
-        <div class="tool-icon">
-          <svg viewBox="0 0 24 24">
-            <rect x="5" y="2" width="14" height="20" rx="2"/>
-            <line x1="9" y1="7" x2="15" y2="7"/>
-            <line x1="9" y1="11" x2="15" y2="11"/>
-            <line x1="9" y1="15" x2="12" y2="15"/>
-          </svg>
+  <!-- РЯДЫ ШАБЛОНА -->
+  <div class="rows-wrap" id="rows-wrap">
+
+    <!-- РЯД 1 -->
+    <div class="grid g4">
+
+      <div class="cell">
+        <div class="block-head"><span class="bn">1</span><span class="bname">Факты</span></div>
+        <p class="bhint">Паттерн</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="la-text">Часть клиентов WB также продаёт на Ozon</div></div>
+          <div class="row"><div class="ln">2</div><div class="la-text">Крупные клиенты продлевают подписку реже малых при схожем уровне удовлетворённости</div></div>
+          <div class="row"><div class="ln">3</div><div class="la"></div></div>
+          <div class="row"><div class="ln">4</div><div class="la"></div></div>
+          <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
-        <p class="tool-title">Тренажёр «Крылья братьев Райт»</p>
-      </div>
-      <p class="tool-caption">Маккаллоу Д. «Братья Райт». — М.: Альпина, 2017</p>
-
-      <!-- Развёртка вопроса — с левой границей -->
-      <div class="trainer-expanded" id="trainer-expanded">
-        <p class="trainer-q">«Лилиенталя погубила его неспособность правильно сбалансировать машину в воздухе» — это:</p>
-        <ul class="trainer-options">
-          <li><strong>Наблюдение</strong> — братья изучили описания и фотографии крушения планера</li>
-          <li><strong>Знание</strong> — установленная и подтверждённая техническая причина катастрофы</li>
-          <li><strong>Прогноз</strong> — предсказание, что без эффективного управления полёты обречены</li>
-          <li class="correct"><strong>Гипотеза</strong> — правдоподобное предположение о причине гибели на основе прочитанных материалов, не проверенное братьями опытным путём</li>
-        </ul>
       </div>
 
-      <div class="tool-btns">
-        <button class="btn btn--secondary" id="trainer-btn" onclick="toggleTrainer()">Посмотреть вопрос</button>
-        <a href="https://t.me/wright_test_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть тренажёр</a>
-      </div>
-    </div>
-
-    <!-- Канвас -->
-    <div class="tool-card">
-      <div class="tool-header">
-        <div class="tool-icon">
-          <svg viewBox="0 0 24 24">
-            <rect x="3" y="3" width="8" height="8" rx="1"/>
-            <rect x="13" y="3" width="8" height="8" rx="1"/>
-            <rect x="3" y="13" width="8" height="8" rx="1"/>
-            <rect x="13" y="13" width="8" height="8" rx="1"/>
-          </svg>
+      <div class="cell">
+        <div class="block-head"><span class="bn">2</span><span class="bname">Вопрос к паттерну</span></div>
+        <p class="bhint">Почему? Как? Зачем?</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="la-text">Почему крупные селлеры на WB продлевают подписку реже малых при схожем уровне удовлетворённости?</div></div>
+          <div class="row"><div class="ln">2</div><div class="la"></div></div>
+          <div class="row"><div class="ln">3</div><div class="la"></div></div>
+          <div class="row"><div class="ln">4</div><div class="la"></div></div>
+          <div class="row"><div class="ln">5</div><div class="la"></div></div>
         </div>
-        <p class="tool-title">Канвас «Монополия гипотез»</p>
       </div>
-      <p class="tool-caption">Кейс составлен по материалам ФРИИ</p>
-      <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="tool-preview-img">
-        <img src="examplefilled.png" alt="Пример заполненного канваса">
-      </a>
-      <div class="tool-btns">
-        <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Посмотреть пример</a>
-        <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть канвас</a>
+
+      <div class="cell span2 nr">
+        <div class="block-head"><span class="bn">3</span><span class="bname">Гипотеза</span></div>
+        <p class="bhint">Паттерн происходит потому, что...</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="cba-text">Крупные клиенты реже продлевают, потому что ежемесячная оплата не соответствует их квартальным финансовым циклам</div><div class="cbc"><div class="cb cb-ok cb-checked-ok">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">2</div><div class="cba-text">Часть клиентов не расширяет использование системы, потому что она не поддерживает их продажи на Ozon</div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no cb-checked-no">✗</div></div></div>
+          <div class="row"><div class="ln">3</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">4</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
+          <div class="row"><div class="ln">5</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok">✓</div><div class="cb cb-no">✗</div></div></div>
+        </div>
       </div>
+
     </div>
 
-  </div><!-- /tools -->
+    <!-- РЯД 2 -->
+    <div class="grid g4 row2">
 
-  <!-- ─── КАРТОЧКИ ТАРИФОВ ─────────────────────────────────── -->
-  <div class="cards" id="pricing">
-
-    <!-- Наблюдатель -->
-    <article class="card">
-      <p class="card-name">Наблюдатель</p>
-      <p class="card-sub">Освоить метод самостоятельно</p>
-      <div class="card-price">Бесплатно</div>
-      <hr class="card-divider">
-      <ul class="features">
-        <li><span class="check">✓</span><span>Тренажёр в Telegram</span></li>
-        <li><span class="check">✓</span><span>Глоссарий и канон гипотезы</span></li>
-        <li><span class="check">✓</span><span>Канвас — открыть онлайн</span></li>
-        <li><span class="check">✓</span><span>Канвас PDF — рус · eng</span></li>
-      </ul>
-      <div class="card-btns">
-        <a href="https://t.me/wright_test_bot"
-           target="_blank" rel="noopener noreferrer"
-           class="btn btn--primary">Открыть тренажёр</a>
-        <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/"
-           target="_blank" rel="noopener noreferrer"
-           class="btn btn--secondary">Скачать канвас PDF</a>
+      <div class="cell nb">
+        <div class="block-head"><span class="bn">4</span><span class="bname">Механизм</span></div>
+        <p class="bhint">Это работает так:...</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="la"></div></div>
+          <div class="row"><div class="ln">2</div><div class="la"></div></div>
+          <div class="row"><div class="ln">3</div><div class="la"></div></div>
+          <div class="row"><div class="ln">4</div><div class="la"></div></div>
+          <div class="row"><div class="ln">5</div><div class="la"></div></div>
+        </div>
       </div>
-    </article>
 
-    <!-- Аналитик -->
-    <article class="card">
-      <p class="card-name">Аналитик</p>
-      <p class="card-sub">Увидеть метод изнутри</p>
-      <div class="card-price">По запросу</div>
-      <hr class="card-divider">
-      <ul class="features">
-        <li><span class="check">✓</span><span>30 минут с автором</span></li>
-        <li><span class="check">✓</span><span>Мой кейс — показываю логику</span></li>
-        <li><span class="check">✓</span><span>Вопросы по ходу</span></li>
-        <li><span class="check">✓</span><span>Без подготовки</span></li>
-      </ul>
-      <hr class="features-sep">
-      <ul class="features">
-        <li><span class="check">✓</span><span>Запись остаётся у вас</span></li>
-        <li><span class="check">✓</span><span>Онлайн или офлайн</span></li>
-      </ul>
-      <div class="card-btns">
-        <a href="https://koalendar.com/e/hypothesis-canvas"
-           target="_blank" rel="noopener noreferrer"
-           class="btn btn--secondary">Записаться</a>
+      <div class="cell span3 nr nb">
+        <div class="block-head"><span class="bn">5</span><span class="bname">Инсайт</span></div>
+        <p class="bhint">Что теперь знаем? (после проверки гипотез)</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="la-text-md">Формат оплаты влияет на решение о продлении у крупных клиентов — подтверждено</div></div>
+          <div class="row"><div class="ln">2</div><div class="la-text-md">Ежемесячный цикл создаёт трение в процессе согласования у крупного бизнеса</div></div>
+          <div class="row"><div class="ln">3</div><div class="la-text-md">Спрос на интеграцию с Ozon не подтверждён</div></div>
+          <div class="row"><div class="ln">4</div><div class="la"></div></div>
+          <div class="row"><div class="ln">5</div><div class="la"></div></div>
+        </div>
       </div>
-    </article>
 
-    <!-- Инженер -->
-    <article class="card card--dark">
-      <span class="card-badge">Рекомендуем</span>
-      <p class="card-name">Инженер</p>
-      <p class="card-sub">Решить свой кейс</p>
-      <div class="card-price">По запросу</div>
-      <hr class="card-divider">
-      <ul class="features">
-        <li><span class="check">✓</span><span>45 минут с автором</span></li>
-        <li><span class="check">✓</span><span>Ваш кейс — разбираем вместе</span></li>
-        <li><span class="check">✓</span><span>Кейс высылаете заранее</span></li>
-        <li><span class="check">✓</span><span>Заполненный канвас на выходе</span></li>
-      </ul>
-      <hr class="features-sep">
-      <ul class="features">
-        <li><span class="check">✓</span><span>Запись остаётся у вас</span></li>
-        <li><span class="check">✓</span><span>Онлайн или офлайн</span></li>
-      </ul>
-      <div class="card-btns">
-        <a href="https://koalendar.com/e/hypothesis-canvas"
-           target="_blank" rel="noopener noreferrer"
-           class="btn btn--primary">Записаться</a>
+    </div>
+
+    <!-- РЯД 3: Идея / RICE (блок 7 — эталон, не трогать) -->
+    <div class="row3">
+
+      <div class="cell-idea">
+        <div class="block-head"><span class="bn">6</span><span class="bname">Идея</span></div>
+        <p class="bhint">Делаем...</p>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="la-text-md">Ввести тарифы с длинным циклом оплаты: квартал, полгода, год</div></div>
+          <div class="row"><div class="ln">2</div><div class="la"></div></div>
+          <div class="row"><div class="ln">3</div><div class="la"></div></div>
+          <div class="row"><div class="ln">4</div><div class="la"></div></div>
+          <div class="row"><div class="ln">5</div><div class="la"></div></div>
+        </div>
       </div>
-    </article>
 
+      <div class="cell-rice">
+        <div class="block-head"><span class="bn">7</span><span class="bname">RICE</span></div>
+        <div class="rice-head-row">
+          <div class="rice-ch">R</div>
+          <div class="rice-ch">I</div>
+          <div class="rice-ch">C</div>
+          <div class="rice-ch">E</div>
+          <div class="rice-ch">Score</div>
+        </div>
+        <div class="lined">
+          <div class="row"><div class="ln">1</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
+          <div class="row"><div class="ln">2</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
+          <div class="row"><div class="ln">3</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
+          <div class="row"><div class="ln">4</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
+          <div class="row"><div class="ln">5</div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell"></div><div class="rice-cell total"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /rows-wrap -->
+
+  <!-- ПОДВАЛ -->
+  <div class="footer">
+    <p>© Елена Безгласная, 2026 · <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a> · По вопросам коммерческого использования: <a href="https://t.me/bezshuma_channel" target="_blank">t.me/bezshuma_channel</a></p>
+    <p>Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a></p>
   </div>
 
-  <!-- ─── CTA БЛОК ─────────────────────────────────────────── -->
-  <div class="cta">
-
-    <!-- Запись — тёмная карточка -->
-    <div class="cta-card cta-card--dark">
-      <p class="cta-card-label">Аналитик · Инженер</p>
-      <p class="cta-card-text">Забронируйте удобный слот в календаре — и сразу напишите мне в Telegram, чтобы я подтвердила запись</p>
-      <div class="cta-card-note">
-        ⚠︎ Важно: бронирование в календаре без сообщения в личку не является подтверждением сессии
-      </div>
-      <a href="https://t.me/Elena_Bezglasnaia"
-         target="_blank" rel="noopener noreferrer"
-         class="cta-card-link">@Elena_Bezglasnaia</a>
-    </div>
-
-    <!-- Канал -->
-    <div class="cta-card">
-      <p class="cta-card-label">Канал</p>
-      <p class="cta-card-text">В канале «Без шума» — мысли, наблюдения и факты про доказательное предпринимательство</p>
-      <blockquote class="cta-quote">Доказательное предпринимательство — эмпирический подход к принятию решений в условиях неопределённости, основанный на логике научного метода</blockquote>
-      <p class="cta-card-text">Верю, что 20% рациональности — это совсем не скучно А 80% оставляю на креатив, интуицию и прыжок веры</p>
-      <a href="https://t.me/bezshuma_channel"
-         target="_blank" rel="noopener noreferrer"
-         class="cta-card-link">@bezshuma_channel</a>
-    </div>
-
-  </div>
-
-  <!-- ─── ПОДВАЛ ─────────────────────────────────────────────── -->
-  <footer class="footer">
-    <a href="https://tracker63.tilda.ws/privacy"
-       target="_blank" rel="noopener noreferrer">Политика обработки персональных данных</a>
-    <br>
-    © ИП Безгласная Елена Алексеевна · ИНН 631503578469
-    <br>
-    © 2026 Elena Bezglasnaia ·
-    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-ND 4.0</a>
-    <br>
-    <a href="#top" class="back-top">↑ Наверх</a>
-  </footer>
-
-</div><!-- /wrap -->
+</div><!-- /card -->
 
 <script>
-function toggleTrainer() {
-  const expanded = document.getElementById('trainer-expanded');
-  const btn = document.getElementById('trainer-btn');
-  const isOpen = expanded.classList.contains('open');
-  expanded.classList.toggle('open');
-  btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
+var CARD_W = 1100;
+var CARD_H = 778;
+
+function scaleCard() {
+  var scaleX = document.documentElement.clientWidth / CARD_W;
+  var scaleY = document.documentElement.clientHeight / CARD_H;
+  var scale = Math.floor(Math.min(scaleX, scaleY) * 1000) / 1000;
+  var card = document.getElementById('card');
+  if (card) card.style.zoom = scale;
 }
+
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(scaleCard, 150);
+});
+
+window.addEventListener('load', function() {
+  scaleCard();
+  document.getElementById('card').style.visibility = 'visible';
+});
 </script>
 
 </body>
