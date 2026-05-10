@@ -619,8 +619,73 @@ body {
 
 /* ─── ПЕЧАТЬ ─────────────────────────────────────────────── */
 @media print {
-  .btn--ghost, .cta, .back-top, .footer { display: none; }
-  .hero { min-height: auto; }
+  /* ── Скрываем интерактивное и ненужное ── */
+  .btn--ghost,
+  .back-top,
+  .tools,
+  .card-btns,
+  .card-badge,
+  .footer { display: none !important; }
+
+  /* ── Общий сброс ── */
+  body { background: #fff !important; color: #000 !important; }
+  .wrap { max-width: 100%; padding: 12px; }
+
+  /* ── Hero — только текст, без фото ── */
+  .hero {
+    min-height: auto !important;
+    background: #2C1A0E !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+  }
+  .hero-bg, .hero-overlay { display: none !important; }
+  .hero-content { position: static; }
+
+  /* ── Карточки — одна колонка ── */
+  .cards {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding-top: 0 !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #C9A96E !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    transform: none !important;
+  }
+  .card--dark {
+    background: #2C1A0E !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Контекст ── */
+  .context {
+    box-shadow: none !important;
+    border: 1px solid #C9A96E !important;
+  }
+
+  /* ── CTA — только текст, без кнопок и тёмного фона ── */
+  .cta {
+    grid-template-columns: 1fr 1fr !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .cta-card {
+    box-shadow: none !important;
+    border: 1px solid #C9A96E !important;
+  }
+  .cta-card--dark {
+    background: #fff !important;
+    border: 1px solid #C9A96E !important;
+  }
+  .cta-card--dark .cta-card-label,
+  .cta-card--dark .cta-card-text { color: #2C1A0E !important; }
+  .cta-card--dark .cta-card-note { display: none !important; }
+  .cta-card--dark .cta-card-link { color: #B8933A !important; }
 }
 </style>
 </head>
