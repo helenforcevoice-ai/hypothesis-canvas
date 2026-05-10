@@ -378,7 +378,7 @@ body::before {
 
 <!-- Мобильная подсказка -->
 <div class="mobile-hint" id="mobile-hint">
-  <p>📋 Для работы с канвасом нужен экран побольше<br>Сохраните ссылку и откройте на компьютере</p>
+  <p>📋 Канвас лучше смотреть на большом экране<br>Попробуйте повернуть гаджет горизонтально<br>Или откройте ссылку на компьютере</p>
   <button onclick="document.getElementById('mobile-hint').classList.add('hidden')">Всё равно открыть</button>
 </div>
 
@@ -387,7 +387,7 @@ body::before {
   <div class="header">
     <div class="header-left">
       <p class="header-title" id="hdr-title">Монополия гипотез</p>
-      <p class="header-subtitle" id="header-subtitle">По материалам публичного кейса ФРИИ — «ERP для маркетплейсов»</p>
+      <p class="header-subtitle" id="header-subtitle">Маккаллоу Д. Братья Райт. Люди, которые научили мир летать. — М.: Альпина, 2017</p>
     </div>
     <div class="header-buttons">
       <button class="hbtn active" id="btn-empty"   onclick="showEmpty();trackEvent('template')">Шаблон</button>
@@ -405,7 +405,7 @@ body::before {
     <div class="grid g4">
       <div class="cell">
         <div class="block-head"><span class="bn">1</span><span class="bname" id="b1name">Факты</span></div>
-        <p class="bhint" id="b1hint">Паттерн</p>
+        <p class="bhint" id="b1hint">Наблюдения, паттерны</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -416,7 +416,7 @@ body::before {
       </div>
       <div class="cell">
         <div class="block-head"><span class="bn">2</span><span class="bname" id="b2name">Вопрос к паттерну</span></div>
-        <p class="bhint" id="b2hint">Почему? Как? Зачем?</p>
+        <p class="bhint" id="b2hint">Кто виноват? Почему? Как? Зачем?</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -427,7 +427,7 @@ body::before {
       </div>
       <div class="cell span2 nr">
         <div class="block-head"><span class="bn">3</span><span class="bname" id="b3name">Гипотеза</span></div>
-        <p class="bhint" id="b3hint">Паттерн происходит потому, что...</p>
+        <p class="bhint" id="b3hint">Мнения, версии. Паттерн происходит потому, что...</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok" id="chk-3-1">✓</div><div class="cb cb-no">✗</div></div></div>
           <div class="row"><div class="ln">2</div><div class="cba"></div><div class="cbc"><div class="cb cb-ok" id="chk-3-2">✓</div><div class="cb cb-no">✗</div></div></div>
@@ -466,7 +466,7 @@ body::before {
     <div class="row3">
       <div class="cell-idea">
         <div class="block-head"><span class="bn">6</span><span class="bname" id="b6name">Идея</span></div>
-        <p class="bhint" id="b6hint">Делаем...</p>
+        <p class="bhint" id="b6hint">Что делать?</p>
         <div class="lined">
           <div class="row"><div class="ln">1</div><div class="la"></div></div>
           <div class="row"><div class="ln">2</div><div class="la"></div></div>
@@ -521,28 +521,28 @@ var UI = {
   ru: {
     title:'Монополия гипотез', btnEmpty:'Шаблон', btnEx:'Пример',
     btnLearn:'Изучить термины', btnPdf:'Скачать PDF',
-    b1name:'Факты', b1hint:'Паттерн',
-    b2name:'Вопрос к паттерну', b2hint:'Почему? Как? Зачем?',
-    b3name:'Гипотеза', b3hint:'Паттерн происходит потому, что...',
+    b1name:'Факты', b1hint:'Наблюдения, паттерны',
+    b2name:'Вопрос к паттерну', b2hint:'Кто виноват? Почему? Как? Зачем?',
+    b3name:'Гипотеза', b3hint:'Мнения, версии. Паттерн происходит потому, что...',
     b4name:'Механизм', b4hint:'Это работает так:...',
     b5name:'Инсайт', b5hint:'Что теперь знаем? (после проверки гипотез)',
-    b6name:'Идея', b6hint:'Делаем...',
+    b6name:'Идея', b6hint:'Что делать?',
     subtitle:'Маккаллоу Д. <a href="https://alpinabook.ru/catalog/book-bratya-rayt/?ysclid=modymv02t1865958647" target="_blank" style="color: var(--c-gold-light); text-decoration: underline;">Братья Райт. Люди, которые научили мир летать. — М.: Альпина, 2017</a>',
     footer:'Тренажёр терминологии: <a href="https://t.me/wright_test_bot" target="_blank">«Крылья братьев Райт»</a>',
-    footerLeft:'\u00a9 Елена Безгласная, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href">Монополия гипотез</a>'
+    footerLeft:'\u00a9 Елена Безгласная, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Коммерческое использование и форматы работы: <a href="pricing.html" class="no-print-href" onclick="trackEvent(\'go_to_pricing\')">Монополия гипотез</a>'
   },
   en: {
     title:'Hypothesis Canvas', btnEmpty:'Template', btnEx:'Example',
     btnLearn:'Learn the terms', btnPdf:'Download PDF',
-    b1name:'Facts', b1hint:'The pattern',
-    b2name:'Question about the pattern', b2hint:'Why? How? What for?',
-    b3name:'Hypothesis', b3hint:'The pattern happens because\u2026',
+    b1name:'Facts', b1hint:'Observations, patterns',
+    b2name:'Question about the pattern', b2hint:'Who is to blame? Why? How? What for?',
+    b3name:'Hypothesis', b3hint:'Opinions, versions. The pattern happens because\u2026',
     b4name:'Mechanism', b4hint:'Here\u2019s how it works:\u2026',
     b5name:'Insight', b5hint:'What do we know now? (after testing)',
-    b6name:'Idea', b6hint:'We do\u2026',
+    b6name:'Idea', b6hint:'What to do?',
     subtitle:'McCullough D. <a href="https://alpinabook.ru/catalog/book-bratya-rayt/?ysclid=modymv02t1865958647" target="_blank" style="color: var(--c-gold-light); text-decoration: underline;">The Wright Brothers. Simon & Schuster, 2015</a>',
     footer:'Terminology quiz: <a href="https://t.me/wright_test_bot" target="_blank">\u201cThe Wright Brothers\u201d</a>',
-    footerLeft:'\u00a9 Elena Bezglasnaia, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Commercial use and formats: <a href="pricing.html" class="no-print-href">Monopoly of Hypotheses</a>'
+    footerLeft:'\u00a9 Elena Bezglasnaia, 2026 \u00b7 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" class="no-print-href">CC BY-NC-ND 4.0</a> \u00b7 Commercial use and formats: <a href="pricing.html" class="no-print-href" onclick="trackEvent(\'go_to_pricing\')">Monopoly of Hypotheses</a>'
   }
 };
 
@@ -759,5 +759,6 @@ function trackEvent(eventName, details) {
   } catch(e) {}
 }
 </script>
+
 </body>
 </html>
