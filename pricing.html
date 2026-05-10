@@ -826,6 +826,7 @@ body {
       <div class="card-btns">
         <a href="https://koalendar.com/e/hypothesis-canvas"
            target="_blank" rel="noopener noreferrer"
+           onclick="trackEvent('click_записаться_аналитик')"
            class="btn btn--primary">Записаться</a>
       </div>
     </article>
@@ -851,6 +852,7 @@ body {
       <div class="card-btns">
         <a href="https://koalendar.com/e/hypothesis-canvas"
            target="_blank" rel="noopener noreferrer"
+           onclick="trackEvent('click_записаться_инженер')"
            class="btn btn--primary">Записаться</a>
       </div>
     </article>
@@ -870,6 +872,7 @@ body {
       </div>
       <a href="https://t.me/Elena_Bezglasnaia"
          target="_blank" rel="noopener noreferrer"
+         onclick="trackEvent('click_telegram')"
          class="cta-card-link">@Elena_Bezglasnaia</a>
     </div>
 
@@ -907,6 +910,47 @@ body {
 </div><!-- /wrap -->
 
 <script>
+// ── Аналитика ─────────────────────────────────────────────────
+var ANALYTICS_URL = 'https://script.google.com/macros/s/AKfycbzmx4wjaCguuGiW1P7LqKvBqeu8_qKAIS_KczNK68-zSAIkw5taQuR_hN4l9dj8eW_AfQ/exec';
+
+var USER_ID     = localStorage.getItem('canvas_user') || 'u_' + Date.now().toString(36);
+localStorage.setItem('canvas_user', USER_ID);
+
+var SESSION_ID  = sessionStorage.getItem('pricing_session') || 'sess_' + Math.random().toString(36).substr(2, 9);
+sessionStorage.setItem('pricing_session', SESSION_ID);
+
+var pageLoadTime  = Date.now();
+var actionCount   = 0;
+
+function trackEvent(eventName, details) {
+  actionCount++;
+  try {
+    var device = window.innerWidth <= 768 ? 'mobile' : 'desktop';
+    var payload = {
+      timestamp:       new Date().toISOString(),
+      event:           eventName,
+      session_id:      SESSION_ID,
+      user_id:         USER_ID,
+      action_sequence: actionCount,
+      time_on_page:    Math.floor((Date.now() - pageLoadTime) / 1000),
+      lang:            'ru',
+      device:          device,
+      details:         details || 'pricing'
+    };
+    fetch(ANALYTICS_URL, {
+      method: 'POST',
+      mode:   'no-cors',
+      body:   JSON.stringify(payload)
+    });
+  } catch(e) {}
+}
+
+// Открытие страницы
+window.addEventListener('load', function() {
+  var ref = new URLSearchParams(window.location.search).get('ref') || '';
+  trackEvent('page_open', ref || 'pricing');
+});
+
 document.addEventListener('DOMContentLoaded', function () {
   // ── Кнопка «Посмотреть вопрос» — синхронное открытие обоих блоков ──
   const btn          = document.getElementById('trainer-btn');
@@ -919,6 +963,7 @@ document.addEventListener('DOMContentLoaded', function () {
     canvasBlock.classList.toggle('open');
     btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
     btn.setAttribute('aria-expanded', String(!isOpen));
+    trackEvent('trainer_toggle', isOpen ? 'close' : 'open');
   });
 
   // ── Лайтбокс для превью канваса ──────────────────────────────────
@@ -926,8 +971,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const lightbox = document.getElementById('lightbox');
   const closeBtn = document.getElementById('lightbox-close');
 
-  function openLightbox() { lightbox.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  function closeLightbox() { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+  function openLightbox() {
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    trackEvent('canvas_lightbox');
+  }
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
   thumb.addEventListener('click', openLightbox);
   thumb.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') openLightbox(); });
