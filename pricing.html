@@ -44,6 +44,9 @@
 /* ─── СБРОС ──────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
 body {
   font-family: 'PT Sans', Georgia, serif;
   background: var(--c-bg);
@@ -64,7 +67,7 @@ body {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  min-height: 290px;
+  min-height: clamp(220px, 35vw, 290px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -236,6 +239,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #E8E0CC;
+  cursor: zoom-in;
 }
 .tool-preview-img img {
   width: 100%;
@@ -244,6 +248,54 @@ body {
   transition: opacity 0.2s;
 }
 .tool-preview-img:hover img { opacity: 0.88; }
+
+/* ─── ЛАЙТБОКС ───────────────────────────────────────────── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44,26,14,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+}
+.lightbox.open {
+  display: flex;
+}
+.lightbox-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.lightbox-inner img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 8px;
+  display: block;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.5);
+}
+.lightbox-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 32px;
+  height: 32px;
+  background: var(--c-gold);
+  color: var(--c-dark);
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.lightbox-close:hover { background: var(--c-gold-mid); }
 
 /* ─── ЦИТАТА В БЛОКЕ КАНАЛА ──────────────────────────────── */
 .cta-quote {
@@ -277,6 +329,9 @@ body {
   border-left: 3px solid var(--c-gold);
   padding-left: 12px;
   margin-top: 4px;
+  flex: 1;
+  justify-content: center;
+  gap: 10px;
 }
 .trainer-q {
   font-weight: 700;
@@ -468,6 +523,11 @@ body {
 .cta-card--dark {
   background: var(--c-dark);
   border-color: var(--c-gold);
+  gap: 0;
+  justify-content: space-between;
+}
+.cta-card--dark .cta-card-note {
+  margin: 1.25rem 0;
 }
 .cta-card-label {
   font-size: 11px;
@@ -482,11 +542,10 @@ body {
   font-size: 14px;
   color: var(--c-brown);
   line-height: 1.65;
-  flex: 1;
 }
 .cta-card--dark .cta-card-text { color: var(--c-gold-light); }
 
-/* Предупреждение о подтверждении — по центру */
+/* Предупреждение о подтверждении — по центру блока */
 .cta-card-note {
   font-size: 12px;
   color: var(--c-gold-mid);
@@ -496,7 +555,6 @@ body {
   border-radius: var(--radius-md);
   background: rgba(184,147,58,0.06);
   text-align: center;
-  margin: auto 0; /* симметричные отступы сверху и снизу */
 }
 
 .cta-card-link {
@@ -549,9 +607,14 @@ body {
   .cta { grid-template-columns: 1fr; }
   .tool-btns { flex-direction: column; }
 }
+/* Горизонтальный телефон — инструменты в одну колонку */
+@media (max-height: 500px) and (orientation: landscape) {
+  .tools { grid-template-columns: 1fr; }
+  .trainer-options { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .trainer-options li { flex: 1 1 45%; }
+}
 @media (min-width: 641px) and (max-width: 900px) {
-  .cards { grid-template-columns: 1fr 1fr; }
-  .card:last-child { grid-column: 1 / -1; max-width: 50%; margin: 0 auto; }
+  .cards { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 }
 
 /* ─── ПЕЧАТЬ ─────────────────────────────────────────────── */
@@ -618,7 +681,9 @@ body {
       </div>
 
       <div class="tool-btns">
-        <button class="btn btn--secondary" id="trainer-btn" onclick="toggleBoth()">Посмотреть вопрос</button>
+        <button class="btn btn--secondary" id="trainer-btn"
+                aria-expanded="false"
+                aria-controls="trainer-expanded canvas-expanded">Посмотреть вопрос</button>
         <a href="https://t.me/wright_test_bot" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Открыть тренажёр</a>
       </div>
     </div>
@@ -638,9 +703,9 @@ body {
       </div>
       <p class="tool-caption">Кейс составлен по материалам ФРИИ</p>
       <div class="canvas-expanded" id="canvas-expanded">
-        <a href="frii_canvas.html" target="_blank" rel="noopener noreferrer" class="tool-preview-img">
-          <img src="examplefilled.png" alt="Пример заполненного канваса">
-        </a>
+        <div class="tool-preview-img" id="canvas-thumb" role="button" tabindex="0" aria-label="Увеличить пример канваса">
+          <img src="examplefilled.png" alt="Пример заполненного канваса" loading="lazy">
+        </div>
       </div>
       <div class="tool-btns">
         <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/frii_canvas.html" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Посмотреть пример</a>
@@ -669,10 +734,10 @@ body {
       <div class="card-btns">
         <a href="https://t.me/wright_test_bot"
            target="_blank" rel="noopener noreferrer"
-           class="btn btn--primary">Открыть тренажёр</a>
+           class="btn btn--secondary">Открыть тренажёр</a>
         <a href="https://helenforcevoice-ai.github.io/hypothesis-canvas/"
            target="_blank" rel="noopener noreferrer"
-           class="btn btn--secondary">Скачать канвас PDF</a>
+           class="btn btn--primary">Скачать канвас PDF</a>
       </div>
     </article>
 
@@ -696,7 +761,7 @@ body {
       <div class="card-btns">
         <a href="https://koalendar.com/e/hypothesis-canvas"
            target="_blank" rel="noopener noreferrer"
-           class="btn btn--secondary">Записаться</a>
+           class="btn btn--primary">Записаться</a>
       </div>
     </article>
 
@@ -761,25 +826,50 @@ body {
     <a href="https://tracker63.tilda.ws/privacy"
        target="_blank" rel="noopener noreferrer">Политика обработки персональных данных</a>
     <br>
-    © ИП Безгласная Елена Алексеевна · ИНН 631503578469 ·
-    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC-ND 4.0</a>
+    © ИП Безгласная Елена Алексеевна · ИНН 631503578469
     <br>
     <a href="#top" class="back-top">↑ Наверх</a>
   </footer>
 
+  <!-- ─── ЛАЙТБОКС ────────────────────────────────────────── -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Пример заполненного канваса">
+    <div class="lightbox-inner" onclick="event.stopPropagation()">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Закрыть">✕</button>
+      <img src="examplefilled.png" alt="Пример заполненного канваса">
+    </div>
+  </div>
+
 </div><!-- /wrap -->
 
 <script>
-function toggleBoth() {
+document.addEventListener('DOMContentLoaded', function () {
+  // ── Кнопка «Посмотреть вопрос» — синхронное открытие обоих блоков ──
+  const btn          = document.getElementById('trainer-btn');
   const trainerBlock = document.getElementById('trainer-expanded');
   const canvasBlock  = document.getElementById('canvas-expanded');
-  const btn          = document.getElementById('trainer-btn');
-  const isOpen       = trainerBlock.classList.contains('open');
 
-  trainerBlock.classList.toggle('open');
-  canvasBlock.classList.toggle('open');
-  btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
-}
+  btn.addEventListener('click', function () {
+    const isOpen = trainerBlock.classList.contains('open');
+    trainerBlock.classList.toggle('open');
+    canvasBlock.classList.toggle('open');
+    btn.textContent = isOpen ? 'Посмотреть вопрос' : 'Свернуть';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+  });
+
+  // ── Лайтбокс для превью канваса ──────────────────────────────────
+  const thumb    = document.getElementById('canvas-thumb');
+  const lightbox = document.getElementById('lightbox');
+  const closeBtn = document.getElementById('lightbox-close');
+
+  function openLightbox() { lightbox.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeLightbox() { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+
+  thumb.addEventListener('click', openLightbox);
+  thumb.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') openLightbox(); });
+  lightbox.addEventListener('click', closeLightbox);
+  closeBtn.addEventListener('click', function(e) { e.stopPropagation(); closeLightbox(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+});
 </script>
 
 </body>
